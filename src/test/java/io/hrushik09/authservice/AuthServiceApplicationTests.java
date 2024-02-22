@@ -1,9 +1,8 @@
 package io.hrushik09.authservice;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@EndToEndTest
 class AuthServiceApplicationTests {
 
     @Test
