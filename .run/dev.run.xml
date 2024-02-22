@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="dev" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+        <option name="ACTIVE_PROFILES" value="dev"/>
+        <module name="auth-service"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="io.hrushik09.authservice.AuthServiceApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="io.hrushik09.authservice.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>
