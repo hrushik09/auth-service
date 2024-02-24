@@ -86,7 +86,11 @@ public class SecurityConfig {
                 .password(passwordEncoder.encode("abc"))
                 .authorities("read", "write")
                 .build();
-        return new InMemoryUserDetailsManager(userDetails);
+        UserDetails defaultAdmin = User.withUsername("default-admin")
+                .password(passwordEncoder.encode("qwe"))
+                .authorities("defaultAdmin")
+                .build();
+        return new InMemoryUserDetailsManager(userDetails, defaultAdmin);
     }
 
     @Bean

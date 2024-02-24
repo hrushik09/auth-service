@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -30,6 +31,13 @@ public class AuthorityControllerTest {
         void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
             mockMvc.perform(post("/authorities")
                             .with(user("random-user")))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @WithMockUser(username = "default-admin", authorities = "randomAuthority")
+        void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
+            mockMvc.perform(post("/authorities"))
                     .andExpect(status().isForbidden());
         }
     }
