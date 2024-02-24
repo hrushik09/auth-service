@@ -9,6 +9,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @EndToEndTest
 public class AuthorityEndToEndTest {
@@ -28,13 +29,14 @@ public class AuthorityEndToEndTest {
                 .contentType(ContentType.JSON)
                 .body("""
                         {
-                        "name": "read"
+                        "name": "api:read"
                         }
                         """)
                 .when()
                 .post("/api/authorities")
                 .then()
                 .statusCode(201)
-                .body("name", equalTo("read"));
+                .body("id", notNullValue())
+                .body("name", equalTo("api:read"));
     }
 }
