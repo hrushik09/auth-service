@@ -1,4 +1,4 @@
-package io.hrushik09.authservice;
+package io.hrushik09.authservice.setup;
 
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.extension.BeforeEachCallback;

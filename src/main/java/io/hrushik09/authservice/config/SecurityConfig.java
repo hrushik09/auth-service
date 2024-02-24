@@ -8,6 +8,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -43,6 +44,7 @@ import java.util.List;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
     @Bean
     @Order(1)
@@ -60,6 +62,9 @@ public class SecurityConfig {
     SecurityFilterChain appSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .formLogin(withDefaults())
+                .httpBasic(withDefaults())
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/authorities/**"))
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .build();
@@ -81,7 +86,11 @@ public class SecurityConfig {
                 .password(passwordEncoder.encode("abc"))
                 .authorities("read", "write")
                 .build();
-        return new InMemoryUserDetailsManager(userDetails);
+        UserDetails defaultAdmin = User.withUsername("default-admin")
+                .password(passwordEncoder.encode("qwe"))
+                .authorities("defaultAdmin")
+                .build();
+        return new InMemoryUserDetailsManager(userDetails, defaultAdmin);
     }
 
     @Bean

@@ -1,0 +1,9 @@
+CREATE TABLE authorities
+(
+    id         INT         NOT NULL AUTO_INCREMENT,
+    name       VARCHAR(45) NOT NULL,
+    created_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT PK_authorities PRIMARY KEY (id),
+    CONSTRAINT UK_authorities_name UNIQUE (name)
+);
