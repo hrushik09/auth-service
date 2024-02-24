@@ -1,5 +1,6 @@
 package io.hrushik09.authservice.authorities;
 
+import io.hrushik09.authservice.authorities.dto.AuthorityDTO;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityRequest;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
@@ -23,5 +24,11 @@ public class AuthorityController {
     CreateAuthorityResponse create(@RequestBody @Valid CreateAuthorityRequest request) {
         CreateAuthorityCommand cmd = new CreateAuthorityCommand(request.name());
         return authorityService.create(cmd);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("@accessControlEvaluator.isDefaultAdmin()")
+    AuthorityDTO fetchById(@PathVariable Integer id) {
+        return authorityService.fetchById(id);
     }
 }
