@@ -1,6 +1,7 @@
 package io.hrushik09.authservice.authorities;
 
 import io.hrushik09.authservice.config.SecurityConfig;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,9 +17,12 @@ public class AuthorityControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void shouldReturn401WhenNotAuthenticated() throws Exception {
-        mockMvc.perform(post("/authorities"))
-                .andExpect(status().isUnauthorized());
+    @Nested
+    class CreateAuthority {
+        @Test
+        void shouldReturn401WhenNotAuthenticated() throws Exception {
+            mockMvc.perform(post("/authorities"))
+                    .andExpect(status().isUnauthorized());
+        }
     }
 }
