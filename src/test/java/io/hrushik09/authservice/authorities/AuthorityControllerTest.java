@@ -13,6 +13,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -80,6 +81,24 @@ public class AuthorityControllerTest {
                                         """))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.error", equalTo("Authority with name duplicateAuthority already exists")));
+            }
+
+            @Test
+            void shouldCreateAuthority() throws Exception {
+                when(authorityService.create(new CreateAuthorityRequest("api:read")))
+                        .thenReturn(new CreateAuthorityResponse(1, "api:read"));
+
+                mockMvc.perform(post("/authorities")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "name": "api:read"
+                                        }
+                                        """)
+                        )
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id", notNullValue()))
+                        .andExpect(jsonPath("$.name", equalTo("api:read")));
             }
         }
     }
