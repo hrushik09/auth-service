@@ -12,6 +12,7 @@ public class AuthorityService {
         this.authorityRepository = authorityRepository;
     }
 
+    @Transactional
     public CreateAuthorityResponse create(CreateAuthorityCommand cmd) {
         authorityRepository.findByName(cmd.name())
                 .ifPresent(a -> {
