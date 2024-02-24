@@ -4,6 +4,7 @@ import io.hrushik09.authservice.authorities.dto.AuthorityDTO;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
 import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
+import io.hrushik09.authservice.authorities.exceptions.AuthorityDoesNotExist;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,8 @@ public class AuthorityService {
     }
 
     public AuthorityDTO fetchById(Integer id) {
-        return null;
+        return authorityRepository.findById(id)
+                .map(AuthorityDTO::from)
+                .orElseThrow(() -> new AuthorityDoesNotExist(id));
     }
 }
