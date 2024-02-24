@@ -1,4 +1,6 @@
-package io.hrushik09.authservice.authorities;
+package io.hrushik09.authservice.authorities.dto;
+
+import io.hrushik09.authservice.authorities.Authority;
 
 public record CreateAuthorityResponse(
         Integer id,

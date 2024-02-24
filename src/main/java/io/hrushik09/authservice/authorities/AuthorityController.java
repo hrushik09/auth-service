@@ -1,5 +1,8 @@
 package io.hrushik09.authservice.authorities;
 
+import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
+import io.hrushik09.authservice.authorities.dto.CreateAuthorityRequest;
+import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

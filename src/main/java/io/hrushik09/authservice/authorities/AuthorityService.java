@@ -1,5 +1,8 @@
 package io.hrushik09.authservice.authorities;
 
+import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
+import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
+import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

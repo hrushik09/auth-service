@@ -1,5 +1,8 @@
 package io.hrushik09.authservice.authorities;
 
+import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
+import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
+import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
 import io.hrushik09.authservice.config.SecurityConfig;
 import io.hrushik09.authservice.setup.AccessControlEvaluatorTestConfig;
 import org.junit.jupiter.api.Nested;

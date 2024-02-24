@@ -1,6 +1,6 @@
 package io.hrushik09.authservice.advice;
 
-import io.hrushik09.authservice.authorities.AuthorityAlreadyExists;
+import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
