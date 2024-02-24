@@ -21,24 +21,27 @@ public class AuthorityControllerTest {
 
     @Nested
     class CreateAuthority {
-        @Test
-        void shouldReturn401WhenNotAuthenticated() throws Exception {
-            mockMvc.perform(post("/authorities"))
-                    .andExpect(status().isUnauthorized());
-        }
+        @Nested
+        class AuthFailure {
+            @Test
+            void shouldReturn401WhenNotAuthenticated() throws Exception {
+                mockMvc.perform(post("/authorities"))
+                        .andExpect(status().isUnauthorized());
+            }
 
-        @Test
-        @WithMockUser(username = "random-user")
-        void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
-            mockMvc.perform(post("/authorities"))
-                    .andExpect(status().isForbidden());
-        }
+            @Test
+            @WithMockUser(username = "random-user")
+            void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
+                mockMvc.perform(post("/authorities"))
+                        .andExpect(status().isForbidden());
+            }
 
-        @Test
-        @WithMockUser(username = "default-admin", authorities = "randomAuthority")
-        void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
-            mockMvc.perform(post("/authorities"))
-                    .andExpect(status().isForbidden());
+            @Test
+            @WithMockUser(username = "default-admin", authorities = "randomAuthority")
+            void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
+                mockMvc.perform(post("/authorities"))
+                        .andExpect(status().isForbidden());
+            }
         }
     }
 }
