@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,6 +24,13 @@ public class AuthorityControllerTest {
         void shouldReturn401WhenNotAuthenticated() throws Exception {
             mockMvc.perform(post("/authorities"))
                     .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
+            mockMvc.perform(post("/authorities")
+                            .with(user("random-user")))
+                    .andExpect(status().isForbidden());
         }
     }
 }
