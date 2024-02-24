@@ -11,6 +11,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static io.hrushik09.authservice.authorities.AuthorityBuilder.anAuthority;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -35,7 +37,7 @@ class AuthorityServiceTest {
         void shouldThrowWhenAuthorityWithNameAlreadyExists() {
             String duplicateAuthority = "duplicateAuthority";
             when(authorityRepository.findByName(duplicateAuthority))
-                    .thenThrow(new AuthorityAlreadyExists(duplicateAuthority));
+                    .thenReturn(Optional.of(anAuthority().withId(23).build()));
 
             assertThatThrownBy(() -> authorityService.create(new CreateAuthorityCommand(duplicateAuthority)))
                     .isInstanceOf(AuthorityAlreadyExists.class)
