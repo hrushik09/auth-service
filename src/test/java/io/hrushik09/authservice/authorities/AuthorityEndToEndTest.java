@@ -32,7 +32,7 @@ public class AuthorityEndToEndTest {
                         }
                         """)
                 .when()
-                .post("/authorities")
+                .post("/api/authorities")
                 .then()
                 .statusCode(201)
                 .body("name", equalTo("read"));

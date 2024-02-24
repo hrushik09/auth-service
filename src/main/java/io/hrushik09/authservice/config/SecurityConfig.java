@@ -64,7 +64,7 @@ public class SecurityConfig {
                 .formLogin(withDefaults())
                 .httpBasic(withDefaults())
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/authorities/**"))
+                        .ignoringRequestMatchers("/api/authorities/**"))
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .build();

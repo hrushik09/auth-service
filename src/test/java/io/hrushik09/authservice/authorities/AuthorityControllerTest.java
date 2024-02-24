@@ -34,14 +34,14 @@ public class AuthorityControllerTest {
         class AuthFailure {
             @Test
             void shouldReturn401WhenNotAuthenticated() throws Exception {
-                mockMvc.perform(post("/authorities"))
+                mockMvc.perform(post("/api/authorities"))
                         .andExpect(status().isUnauthorized());
             }
 
             @Test
             @WithMockUser(username = "random-user")
             void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
-                mockMvc.perform(post("/authorities")
+                mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
@@ -54,7 +54,7 @@ public class AuthorityControllerTest {
             @Test
             @WithMockUser(username = "default-admin", authorities = "randomAuthority")
             void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
-                mockMvc.perform(post("/authorities")
+                mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
@@ -72,7 +72,7 @@ public class AuthorityControllerTest {
             void shouldThrowWhenAuthorityWithNameAlreadyExists() throws Exception {
                 when(authorityService.create(any())).thenThrow(new AuthorityAlreadyExists("duplicateAuthority"));
 
-                mockMvc.perform(post("/authorities")
+                mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
@@ -88,7 +88,7 @@ public class AuthorityControllerTest {
                 when(authorityService.create(new CreateAuthorityCommand("api:read")))
                         .thenReturn(new CreateAuthorityResponse(1, "api:read"));
 
-                mockMvc.perform(post("/authorities")
+                mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
