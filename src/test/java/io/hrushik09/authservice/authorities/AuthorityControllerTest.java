@@ -3,6 +3,7 @@ package io.hrushik09.authservice.authorities;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
 import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
+import io.hrushik09.authservice.authorities.exceptions.AuthorityDoesNotExist;
 import io.hrushik09.authservice.config.SecurityConfig;
 import io.hrushik09.authservice.setup.AccessControlEvaluatorTestConfig;
 import org.junit.jupiter.api.Nested;
@@ -19,6 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -102,6 +104,47 @@ public class AuthorityControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.id", notNullValue()))
                         .andExpect(jsonPath("$.name", equalTo("api:read")));
+            }
+        }
+    }
+
+    @Nested
+    class FetchById {
+        @Nested
+        class AuthFailure {
+            @Test
+            void shouldReturn401WhenNotAuthenticated() throws Exception {
+                mockMvc.perform(get("/api/authorities/{id}", 54))
+                        .andExpect(status().isUnauthorized());
+            }
+
+            @Test
+            @WithMockUser(username = "random-user")
+            void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
+                mockMvc.perform(get("/api/authorities/{id}", 65))
+                        .andExpect(status().isForbidden());
+            }
+
+            @Test
+            @WithMockUser(username = "default-admin", authorities = "randomAuthority")
+            void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
+                mockMvc.perform(get("/api/authorities/{id}", 98))
+                        .andExpect(status().isForbidden());
+            }
+        }
+
+        @Nested
+        @WithMockUser(username = "default-admin", authorities = "defaultAdmin")
+        class AuthSuccess {
+            @Test
+            void shouldThrowWhenFetchingNonExistingAuthority() throws Exception {
+                Integer nonExistingId = 9;
+                when(authorityService.fetchById(nonExistingId))
+                        .thenThrow(new AuthorityDoesNotExist(nonExistingId));
+
+                mockMvc.perform(get("/api/authorities/{id}", nonExistingId))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.error", equalTo("Authority with id " + nonExistingId + " does not exist")));
             }
         }
     }

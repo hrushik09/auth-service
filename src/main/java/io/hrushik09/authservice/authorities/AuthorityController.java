@@ -24,4 +24,10 @@ public class AuthorityController {
         CreateAuthorityCommand cmd = new CreateAuthorityCommand(request.name());
         return authorityService.create(cmd);
     }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("@accessControlEvaluator.isDefaultAdmin()")
+    void fetchById(@PathVariable Integer id) {
+        authorityService.fetchById(id);
+    }
 }

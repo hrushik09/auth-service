@@ -29,4 +29,8 @@ public class AuthorityService {
         Authority saved = authorityRepository.save(authority);
         return CreateAuthorityResponse.from(saved);
     }
+
+    public Object fetchById(Integer id) {
+        return null;
+    }
 }
