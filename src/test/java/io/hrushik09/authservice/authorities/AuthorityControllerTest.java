@@ -85,7 +85,7 @@ public class AuthorityControllerTest {
 
             @Test
             void shouldCreateAuthority() throws Exception {
-                when(authorityService.create(new CreateAuthorityRequest("api:read")))
+                when(authorityService.create(new CreateAuthorityCommand("api:read")))
                         .thenReturn(new CreateAuthorityResponse(1, "api:read"));
 
                 mockMvc.perform(post("/authorities")

@@ -18,6 +18,7 @@ public class AuthorityController {
     @PreAuthorize("@accessControlEvaluator.isDefaultAdmin()")
     @ResponseStatus(HttpStatus.CREATED)
     CreateAuthorityResponse create(@RequestBody @Valid CreateAuthorityRequest request) {
-        return authorityService.create(request);
+        CreateAuthorityCommand cmd = new CreateAuthorityCommand(request.name());
+        return authorityService.create(cmd);
     }
 }
