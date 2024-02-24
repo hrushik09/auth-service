@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/authorities")
 public class AuthorityController {
     @PostMapping
-    @PreAuthorize("authentication.name == 'default-admin' && hasAuthority('defaultAdmin')")
+    @PreAuthorize("@accessControlEvaluator.isDefaultAdmin()")
     void create() {
     }
 }
