@@ -12,6 +12,10 @@ public class AuthorityService {
                 .ifPresent(a -> {
                     throw new AuthorityAlreadyExists(cmd.name());
                 });
-        return null;
+
+        Authority authority = new Authority();
+        authority.setName(cmd.name());
+        Authority saved = authorityRepository.save(authority);
+        return CreateAuthorityResponse.from(saved);
     }
 }
