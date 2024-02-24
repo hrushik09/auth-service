@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,9 +27,9 @@ public class AuthorityControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "random-user")
         void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
-            mockMvc.perform(post("/authorities")
-                            .with(user("random-user")))
+            mockMvc.perform(post("/authorities"))
                     .andExpect(status().isForbidden());
         }
 
