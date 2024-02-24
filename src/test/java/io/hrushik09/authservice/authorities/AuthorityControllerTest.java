@@ -69,7 +69,7 @@ public class AuthorityControllerTest {
         @WithMockUser(username = "default-admin", authorities = "defaultAdmin")
         class AuthSuccess {
             @Test
-            void shouldNotCreateDuplicateAuthority() throws Exception {
+            void shouldThrowWhenAuthorityWithNameAlreadyExists() throws Exception {
                 when(authorityService.create(any())).thenThrow(new AuthorityAlreadyExists("duplicateAuthority"));
 
                 mockMvc.perform(post("/authorities")
