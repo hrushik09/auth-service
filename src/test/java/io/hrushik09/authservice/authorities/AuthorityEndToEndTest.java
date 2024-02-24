@@ -39,4 +39,31 @@ public class AuthorityEndToEndTest {
                 .body("id", notNullValue())
                 .body("name", equalTo("api:read"));
     }
+
+    @Test
+    void shouldNotCreateDuplicateAuthority() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                        {
+                        "name": "api:read"
+                        }
+                        """)
+                .when()
+                .post("/api/authorities")
+                .then()
+                .statusCode(201);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                        {
+                        "name": "api:read"
+                        }
+                        """)
+                .when()
+                .post("/api/authorities")
+                .then()
+                .statusCode(400);
+    }
 }

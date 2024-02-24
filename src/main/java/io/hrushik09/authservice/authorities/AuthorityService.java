@@ -6,6 +6,8 @@ import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 public class AuthorityService {
@@ -17,10 +19,10 @@ public class AuthorityService {
 
     @Transactional
     public CreateAuthorityResponse create(CreateAuthorityCommand cmd) {
-        authorityRepository.findByName(cmd.name())
-                .ifPresent(a -> {
-                    throw new AuthorityAlreadyExists(cmd.name());
-                });
+        Optional<Authority> optionalAuthority = authorityRepository.findByName(cmd.name());
+        if (optionalAuthority.isPresent()) {
+            throw new AuthorityAlreadyExists(cmd.name());
+        }
 
         Authority authority = new Authority();
         authority.setName(cmd.name());
