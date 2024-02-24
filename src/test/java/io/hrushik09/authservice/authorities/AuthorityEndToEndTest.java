@@ -4,6 +4,7 @@ import io.hrushik09.authservice.setup.EndToEndTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -23,47 +24,50 @@ public class AuthorityEndToEndTest {
                 .basic("default-admin", "qwe");
     }
 
-    @Test
-    void shouldCreateAuthoritySuccessfully() {
-        given()
-                .contentType(ContentType.JSON)
-                .body("""
-                        {
-                        "name": "api:read"
-                        }
-                        """)
-                .when()
-                .post("/api/authorities")
-                .then()
-                .statusCode(201)
-                .body("id", notNullValue())
-                .body("name", equalTo("api:read"));
-    }
+    @Nested
+    class Create {
+        @Test
+        void shouldCreateAuthoritySuccessfully() {
+            given()
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {
+                            "name": "api:read"
+                            }
+                            """)
+                    .when()
+                    .post("/api/authorities")
+                    .then()
+                    .statusCode(201)
+                    .body("id", notNullValue())
+                    .body("name", equalTo("api:read"));
+        }
 
-    @Test
-    void shouldNotCreateDuplicateAuthority() {
-        given()
-                .contentType(ContentType.JSON)
-                .body("""
-                        {
-                        "name": "api:read"
-                        }
-                        """)
-                .when()
-                .post("/api/authorities")
-                .then()
-                .statusCode(201);
+        @Test
+        void shouldNotCreateDuplicateAuthority() {
+            given()
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {
+                            "name": "api:read"
+                            }
+                            """)
+                    .when()
+                    .post("/api/authorities")
+                    .then()
+                    .statusCode(201);
 
-        given()
-                .contentType(ContentType.JSON)
-                .body("""
-                        {
-                        "name": "api:read"
-                        }
-                        """)
-                .when()
-                .post("/api/authorities")
-                .then()
-                .statusCode(400);
+            given()
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {
+                            "name": "api:read"
+                            }
+                            """)
+                    .when()
+                    .post("/api/authorities")
+                    .then()
+                    .statusCode(400);
+        }
     }
 }
