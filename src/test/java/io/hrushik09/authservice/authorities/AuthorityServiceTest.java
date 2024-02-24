@@ -8,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static io.hrushik09.authservice.authorities.AuthorityBuilder.anAuthority;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,11 +42,8 @@ class AuthorityServiceTest {
         @Test
         void shouldSaveInRepositoryWhenCreatingAuthority() {
             String name = "api:write";
-            Authority a = new Authority();
-            a.setId(23);
-            a.setName(name);
             when(authorityRepository.save(any()))
-                    .thenReturn(a);
+                    .thenReturn(anAuthority().withName(name).build());
 
             authorityService.create(new CreateAuthorityCommand(name));
 
@@ -58,11 +56,8 @@ class AuthorityServiceTest {
         @Test
         void shouldReturnCreatedAuthority() {
             String name = "api:update";
-            Authority a = new Authority();
-            a.setId(23);
-            a.setName(name);
             when(authorityRepository.save(any()))
-                    .thenReturn(a);
+                    .thenReturn(anAuthority().withName(name).build());
 
             CreateAuthorityResponse created = authorityService.create(new CreateAuthorityCommand(name));
 
