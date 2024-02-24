@@ -20,7 +20,7 @@ public class AuthorityControllerTest {
     private MockMvc mockMvc;
 
     @Nested
-    class CreateAuthority {
+    class Create {
         @Nested
         class AuthFailure {
             @Test
