@@ -1,13 +1,9 @@
 package io.hrushik09.authservice.authorities;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.Optional;
 
-public class AuthorityRepository {
-    public Optional<Object> findByName(String name) {
-        return null;
-    }
-
-    public Authority save(Authority authority) {
-        return null;
-    }
+public interface AuthorityRepository extends JpaRepository<Authority, Integer> {
+    Optional<Authority> findByName(String name);
 }

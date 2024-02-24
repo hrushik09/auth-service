@@ -1,6 +1,13 @@
 package io.hrushik09.authservice.authorities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "authorities")
 public class Authority {
+    @Id
     private Integer id;
     private String name;
 
