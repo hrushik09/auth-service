@@ -11,13 +11,15 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 @EndToEndTest
-public class AuthorityEndToEndControllerTest {
+public class AuthorityEndToEndTest {
     @LocalServerPort
     private Integer port;
 
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        RestAssured.authentication = RestAssured.preemptive()
+                .basic("default-admin", "qwe");
     }
 
     @Test
