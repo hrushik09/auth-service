@@ -60,6 +60,9 @@ public class SecurityConfig {
     SecurityFilterChain appSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .formLogin(withDefaults())
+                .httpBasic(withDefaults())
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/authorities/**"))
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .build();
