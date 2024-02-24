@@ -1,5 +1,6 @@
 package io.hrushik09.authservice.authorities;
 
+import io.hrushik09.authservice.authorities.dto.AuthorityDTO;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
 import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
@@ -15,6 +16,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.Instant;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -145,6 +148,21 @@ public class AuthorityControllerTest {
                 mockMvc.perform(get("/api/authorities/{id}", nonExistingId))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.error", equalTo("Authority with id " + nonExistingId + " does not exist")));
+            }
+
+            @Test
+            void shouldFetchAuthorityById() throws Exception {
+                Integer id = 4;
+                String name = "domain:read";
+                when(authorityService.fetchById(id))
+                        .thenReturn(new AuthorityDTO(id, name, Instant.now(), Instant.now()));
+
+                mockMvc.perform(get("/api/authorities/{id}", id))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.id", equalTo(id)))
+                        .andExpect(jsonPath("$.name", equalTo(name)))
+                        .andExpect(jsonPath("$.createdAt", notNullValue()))
+                        .andExpect(jsonPath("$.updatedAt", notNullValue()));
             }
         }
     }

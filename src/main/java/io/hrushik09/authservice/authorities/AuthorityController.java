@@ -1,5 +1,6 @@
 package io.hrushik09.authservice.authorities;
 
+import io.hrushik09.authservice.authorities.dto.AuthorityDTO;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityRequest;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
@@ -27,7 +28,7 @@ public class AuthorityController {
 
     @GetMapping("/{id}")
     @PreAuthorize("@accessControlEvaluator.isDefaultAdmin()")
-    void fetchById(@PathVariable Integer id) {
-        authorityService.fetchById(id);
+    AuthorityDTO fetchById(@PathVariable Integer id) {
+        return authorityService.fetchById(id);
     }
 }

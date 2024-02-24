@@ -1,5 +1,6 @@
 package io.hrushik09.authservice.authorities;
 
+import io.hrushik09.authservice.authorities.dto.AuthorityDTO;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityCommand;
 import io.hrushik09.authservice.authorities.dto.CreateAuthorityResponse;
 import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
@@ -30,7 +31,7 @@ public class AuthorityService {
         return CreateAuthorityResponse.from(saved);
     }
 
-    public Object fetchById(Integer id) {
+    public AuthorityDTO fetchById(Integer id) {
         return null;
     }
 }
