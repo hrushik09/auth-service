@@ -2,15 +2,23 @@ package io.hrushik09.authservice.users;
 
 import io.hrushik09.authservice.config.SecurityConfig;
 import io.hrushik09.authservice.setup.AccessControlEvaluatorTestConfig;
+import io.hrushik09.authservice.users.dto.CreateUserCommand;
+import io.hrushik09.authservice.users.exceptions.UsernameAlreadyExistsException;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
@@ -18,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    @MockBean
+    private UserService userService;
 
     @Nested
     class Create {
@@ -41,6 +51,30 @@ public class UserControllerTest {
             void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
                 mockMvc.perform(post("/api/users"))
                         .andExpect(status().isForbidden());
+            }
+        }
+
+        @Nested
+        @WithMockUser(username = "default-admin", authorities = "defaultAdmin")
+        class AuthSuccess {
+            @Test
+            void shouldNotCreateUserIfUsernameAlreadyExists() throws Exception {
+                when(userService.create(any(CreateUserCommand.class)))
+                        .thenThrow(new UsernameAlreadyExistsException("duplicateUsername"));
+
+                mockMvc.perform(post("/api/users")
+                                .contentType(APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "username": "duplicateUsername",
+                                        "password": "doesnt-matter",
+                                        "authorities": [
+                                            "randomAuthority"
+                                        ]
+                                        }
+                                        """))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.error", Matchers.equalTo("User with username duplicateUsername already exists")));
             }
         }
     }
