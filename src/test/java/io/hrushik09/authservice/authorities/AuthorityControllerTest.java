@@ -42,7 +42,13 @@ public class AuthorityControllerTest {
         class AuthFailure {
             @Test
             void shouldReturn401WhenNotAuthenticated() throws Exception {
-                mockMvc.perform(post("/api/authorities"))
+                mockMvc.perform(post("/api/authorities")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "name": "anyRandomName"
+                                        }
+                                        """))
                         .andExpect(status().isUnauthorized());
             }
 
