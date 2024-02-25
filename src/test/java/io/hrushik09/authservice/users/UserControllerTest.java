@@ -1,10 +1,10 @@
 package io.hrushik09.authservice.users;
 
+import io.hrushik09.authservice.authorities.exceptions.AuthorityDoesNotExist;
 import io.hrushik09.authservice.config.SecurityConfig;
 import io.hrushik09.authservice.setup.AccessControlEvaluatorTestConfig;
 import io.hrushik09.authservice.users.dto.CreateUserCommand;
 import io.hrushik09.authservice.users.exceptions.UsernameAlreadyExistsException;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -104,7 +105,28 @@ public class UserControllerTest {
                                         }
                                         """))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.error", Matchers.equalTo("User with username duplicateUsername already exists")));
+                        .andExpect(jsonPath("$.error", equalTo("User with username duplicateUsername already exists")));
+            }
+
+            @Test
+            void shouldNotCreateUserIfAuthorityDoesNotExist() throws Exception {
+                when(userService.create(any(CreateUserCommand.class)))
+                        .thenThrow(new AuthorityDoesNotExist("doesNotExistAuthority"));
+
+                mockMvc.perform(post("/api/users")
+                                .contentType(APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "username": "doesnt matter",
+                                        "password": "doesnt matter",
+                                        "authorities": [
+                                            "newAuthority",
+                                            "doesNotExistAuthority"
+                                        ]
+                                        }
+                                        """))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.error", equalTo("Authority with name doesNotExistAuthority does not exist")));
             }
         }
     }
