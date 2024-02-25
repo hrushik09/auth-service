@@ -10,7 +10,7 @@ public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant createdAt;
