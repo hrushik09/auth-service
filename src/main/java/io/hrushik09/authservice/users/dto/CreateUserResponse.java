@@ -2,9 +2,9 @@ package io.hrushik09.authservice.users.dto;
 
 import java.util.List;
 
-public record CreateUserCommand(
+public record CreateUserResponse(
+        Integer id,
         String username,
-        String password,
-        List<String> authorities
+        List<UserAuthorityDTO> authorities
 ) {
 }

@@ -4,6 +4,8 @@ import io.hrushik09.authservice.authorities.exceptions.AuthorityDoesNotExist;
 import io.hrushik09.authservice.config.SecurityConfig;
 import io.hrushik09.authservice.setup.AccessControlEvaluatorTestConfig;
 import io.hrushik09.authservice.users.dto.CreateUserCommand;
+import io.hrushik09.authservice.users.dto.CreateUserResponse;
+import io.hrushik09.authservice.users.dto.UserAuthorityDTO;
 import io.hrushik09.authservice.users.exceptions.UsernameAlreadyExistsException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.equalTo;
+import java.util.List;
+
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -127,6 +131,34 @@ public class UserControllerTest {
                                         """))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.error", equalTo("Authority with name doesNotExistAuthority does not exist")));
+            }
+
+            @Test
+            void shouldCreateUser() throws Exception {
+                CreateUserCommand cmd = new CreateUserCommand("User 34", "jhsu^223", List.of("api:delete", "api:update"));
+                CreateUserResponse response = new CreateUserResponse(43, "User 34", List.of(
+                        new UserAuthorityDTO(23, "api:delete"),
+                        new UserAuthorityDTO(34, "api:update")));
+                when(userService.create(cmd)).thenReturn(response);
+
+                mockMvc.perform(post("/api/users")
+                                .contentType(APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "username": "User 34",
+                                        "password": "jhsu^223",
+                                        "authorities": [
+                                            "api:delete",
+                                            "api:update"
+                                        ]
+                                        }
+                                        """))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id", notNullValue()))
+                        .andExpect(jsonPath("$.username", equalTo("User 34")))
+                        .andExpect(jsonPath("$.authorities", hasSize(2)))
+                        .andExpect(jsonPath("$.authorities[*].id", hasSize(2)))
+                        .andExpect(jsonPath("$.authorities[*].name", contains("api:delete", "api:update")));
             }
         }
     }
