@@ -78,7 +78,7 @@ public class AuthorityControllerTest {
         class AuthSuccess {
             @Test
             void shouldThrowWhenAuthorityWithNameAlreadyExists() throws Exception {
-                when(authorityService.create(any())).thenThrow(new AuthorityAlreadyExists("duplicateAuthority"));
+                when(authorityService.create(any(CreateAuthorityCommand.class))).thenThrow(new AuthorityAlreadyExists("duplicateAuthority"));
 
                 mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)

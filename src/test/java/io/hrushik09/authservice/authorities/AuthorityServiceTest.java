@@ -49,7 +49,7 @@ class AuthorityServiceTest {
         @Test
         void shouldSaveInRepositoryWhenCreatingAuthority() {
             String name = "api:write";
-            when(authorityRepository.save(any()))
+            when(authorityRepository.save(any(Authority.class)))
                     .thenReturn(anAuthority().withName(name).build());
 
             authorityService.create(new CreateAuthorityCommand(name));
@@ -63,7 +63,7 @@ class AuthorityServiceTest {
         @Test
         void shouldReturnCreatedAuthority() {
             String name = "api:update";
-            when(authorityRepository.save(any()))
+            when(authorityRepository.save(any(Authority.class)))
                     .thenReturn(anAuthority().withName(name).build());
 
             CreateAuthorityResponse created = authorityService.create(new CreateAuthorityCommand(name));
