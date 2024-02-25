@@ -35,21 +35,51 @@ public class UserControllerTest {
         class AuthFailure {
             @Test
             void shouldReturn401WhenNotAuthenticated() throws Exception {
-                mockMvc.perform(post("/api/users"))
+                mockMvc.perform(post("/api/users")
+                                .contentType(APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "username": "randomUsername",
+                                        "password": "randomPassword",
+                                        "authorities": [
+                                            "randomAuthority"
+                                        ]
+                                        }
+                                        """))
                         .andExpect(status().isUnauthorized());
             }
 
             @Test
             @WithMockUser(username = "random-user")
             void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
-                mockMvc.perform(post("/api/users"))
+                mockMvc.perform(post("/api/users")
+                                .contentType(APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "username": "randomUsername",
+                                        "password": "randomPassword",
+                                        "authorities": [
+                                            "randomAuthority"
+                                        ]
+                                        }
+                                        """))
                         .andExpect(status().isForbidden());
             }
 
             @Test
             @WithMockUser(username = "default-admin", authorities = "randomAuthority")
             void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
-                mockMvc.perform(post("/api/users"))
+                mockMvc.perform(post("/api/users")
+                                .contentType(APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "username": "randomUsername",
+                                        "password": "randomPassword",
+                                        "authorities": [
+                                            "randomAuthority"
+                                        ]
+                                        }
+                                        """))
                         .andExpect(status().isForbidden());
             }
         }
