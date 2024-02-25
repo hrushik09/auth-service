@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static io.hrushik09.authservice.users.UserBuilder.aUser;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
@@ -31,10 +32,8 @@ class UserServiceTest {
         @Test
         void shouldThrowWhenUsernameAlreadyExists() {
             String duplicateUsername = "duplicateUsername";
-            User user = new User();
-            user.setUsername(duplicateUsername);
             when(userRepository.findByUsername(duplicateUsername))
-                    .thenReturn(Optional.of(user));
+                    .thenReturn(Optional.of(aUser().withUsername(duplicateUsername).build()));
 
             CreateUserCommand cmd = new CreateUserCommand(duplicateUsername, "doesnt-matter", List.of("randomName"));
             assertThatThrownBy(() -> userService.create(cmd))
