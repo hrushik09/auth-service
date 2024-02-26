@@ -2,3 +2,4 @@
 [ ] add equals, hashCode methods for Authority, User
 [ ] fetch User by id
 [ ] add @WithAnonymousUser for 401 tests
+[ ] check notNullValue
