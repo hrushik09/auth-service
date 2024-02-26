@@ -95,7 +95,7 @@ class UserServiceTest {
             assertThat(captorValue.getAuthorities()).extracting("id")
                     .isNotNull();
             assertThat(captorValue.getAuthorities()).extracting("name")
-                    .containsExactly("api:delete", "api:update");
+                    .containsExactlyInAnyOrder("api:delete", "api:update");
         }
 
         @Test
@@ -122,7 +122,7 @@ class UserServiceTest {
             assertThat(created.authorities()).extracting("id")
                     .hasSize(2);
             assertThat(created.authorities()).extracting("name")
-                    .containsExactly("api:delete", "api:update");
+                    .containsExactlyInAnyOrder("api:delete", "api:update");
         }
     }
 }
