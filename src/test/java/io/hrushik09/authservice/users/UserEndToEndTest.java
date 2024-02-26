@@ -1,10 +1,12 @@
 package io.hrushik09.authservice.users;
 
 import io.hrushik09.authservice.setup.EndToEndTest;
+import io.hrushik09.authservice.setup.EndToEndTestDataPersister;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static io.restassured.RestAssured.given;
@@ -15,16 +17,23 @@ import static org.hamcrest.Matchers.*;
 public class UserEndToEndTest {
     @LocalServerPort
     private Integer port;
+    @Autowired
+    private EndToEndTestDataPersister having;
 
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        RestAssured.authentication = RestAssured.preemptive()
+                .basic("default-admin", "qwe");
     }
 
     @Nested
     class Create {
         @Test
         void shouldCreateUserSuccessfully() {
+            having.persistedAuthority("api:read");
+            having.persistedAuthority("api:write");
+
             given()
                     .contentType(JSON)
                     .body("""

@@ -6,10 +6,14 @@ import io.hrushik09.authservice.users.dto.CreateUserCommand;
 import io.hrushik09.authservice.users.dto.CreateUserResponse;
 import io.hrushik09.authservice.users.exceptions.UsernameAlreadyExistsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Service
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
     private final AuthorityService authorityService;
@@ -21,6 +25,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public CreateUserResponse create(CreateUserCommand cmd) {
         userRepository.findByUsername(cmd.username())
                 .ifPresent(user -> {
