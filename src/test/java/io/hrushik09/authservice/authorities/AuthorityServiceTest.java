@@ -47,7 +47,7 @@ class AuthorityServiceTest {
         }
 
         @Test
-        void shouldSaveInRepositoryWhenCreatingAuthority() {
+        void shouldSaveUsingRepositoryWhenCreatingAuthority() {
             String name = "api:write";
             when(authorityRepository.save(any(Authority.class)))
                     .thenReturn(anAuthority().withName(name).build());

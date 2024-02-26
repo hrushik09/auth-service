@@ -5,6 +5,7 @@ import io.hrushik09.authservice.authorities.AuthorityService;
 import io.hrushik09.authservice.users.dto.CreateUserCommand;
 import io.hrushik09.authservice.users.dto.CreateUserResponse;
 import io.hrushik09.authservice.users.exceptions.UsernameAlreadyExistsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,10 +13,12 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final AuthorityService authorityService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, AuthorityService authorityService) {
+    public UserService(UserRepository userRepository, AuthorityService authorityService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityService = authorityService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public CreateUserResponse create(CreateUserCommand cmd) {
@@ -27,6 +30,12 @@ public class UserService {
         Set<Authority> authorities = cmd.authorities().stream()
                 .map(authorityService::fetchByName)
                 .collect(Collectors.toSet());
-        return null;
+
+        User user = new User();
+        user.setUsername(cmd.username());
+        user.setPassword(passwordEncoder.encode(cmd.password()));
+        user.setAuthorities(authorities);
+        User saved = userRepository.save(user);
+        return CreateUserResponse.from(saved);
     }
 }

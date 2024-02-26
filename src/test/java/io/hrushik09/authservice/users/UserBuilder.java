@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 public class UserBuilder {
     private Integer id = 65;
     private String username = "randomUsername";
+    private String password = "randomPassword";
     private Set<AuthorityBuilder> authorityBuilders = new HashSet<>();
     private Instant createdAt = Instant.parse("2023-03-03T03:03:03Z");
     private Instant updatedAt = Instant.parse("2023-04-04T04:04:04Z");
@@ -20,6 +21,7 @@ public class UserBuilder {
     private UserBuilder(UserBuilder copy) {
         this.id = copy.id;
         this.username = copy.username;
+        this.password = copy.password;
         this.authorityBuilders = copy.authorityBuilders;
         this.createdAt = copy.createdAt;
         this.updatedAt = copy.updatedAt;
@@ -43,6 +45,11 @@ public class UserBuilder {
         return this;
     }
 
+    public UserBuilder withPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
     public UserBuilder with(AuthorityBuilder authorityBuilder) {
         this.authorityBuilders.add(authorityBuilder);
         return this;
@@ -62,6 +69,7 @@ public class UserBuilder {
         User user = new User();
         user.setId(id);
         user.setUsername(username);
+        user.setPassword(password);
         user.setAuthorities(authorityBuilders.stream()
                 .map(AuthorityBuilder::build)
                 .collect(Collectors.toUnmodifiableSet()));
