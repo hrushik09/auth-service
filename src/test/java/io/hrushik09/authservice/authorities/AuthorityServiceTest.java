@@ -103,4 +103,33 @@ class AuthorityServiceTest {
             assertThat(fetched.updatedAt()).isNotNull();
         }
     }
+
+    @Nested
+    class FetchByName {
+        @Test
+        void shouldThrowWhenFetchingNonExistingAuthority() {
+            String doesNotExistAuthority = "doesNotExistAuthority";
+            when(authorityRepository.findByName(doesNotExistAuthority))
+                    .thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> authorityService.fetchByName(doesNotExistAuthority))
+                    .isInstanceOf(AuthorityDoesNotExist.class)
+                    .hasMessage("Authority with name " + doesNotExistAuthority + " does not exist");
+        }
+
+        @Test
+        void shouldFetchAuthorityByName() {
+            String name = "api:update";
+            when(authorityRepository.findByName(name))
+                    .thenReturn(Optional.of(anAuthority().withName(name).build()));
+
+            Authority authority = authorityService.fetchByName(name);
+
+            assertThat(authority).isNotNull();
+            assertThat(authority.getId()).isNotNull();
+            assertThat(authority.getName()).isEqualTo(name);
+            assertThat(authority.getCreatedAt()).isNotNull();
+            assertThat(authority.getUpdatedAt()).isNotNull();
+        }
+    }
 }
