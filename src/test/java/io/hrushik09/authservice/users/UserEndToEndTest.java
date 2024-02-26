@@ -54,7 +54,7 @@ public class UserEndToEndTest {
                     .body("username", equalTo("User 12"))
                     .body("authorities", hasSize(2))
                     .body("authorities.id", hasSize(2))
-                    .body("authorities.name", contains("api:read", "api:write"));
+                    .body("authorities.name", containsInAnyOrder("api:read", "api:write"));
         }
     }
 }

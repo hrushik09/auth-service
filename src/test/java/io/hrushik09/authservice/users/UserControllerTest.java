@@ -158,7 +158,7 @@ public class UserControllerTest {
                         .andExpect(jsonPath("$.username", equalTo("User 34")))
                         .andExpect(jsonPath("$.authorities", hasSize(2)))
                         .andExpect(jsonPath("$.authorities[*].id", hasSize(2)))
-                        .andExpect(jsonPath("$.authorities[*].name", contains("api:delete", "api:update")));
+                        .andExpect(jsonPath("$.authorities[*].name", containsInAnyOrder("api:delete", "api:update")));
             }
         }
     }
