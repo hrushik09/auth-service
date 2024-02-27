@@ -1,4 +1,4 @@
-[ ] POST /users request body, authorities should be unique
+[x] POST /users request body, authorities should be unique
 [ ] POST /users request body, password should be secure
 [ ] add equals, hashCode methods for Authority, User
 [ ] fetch User by id
