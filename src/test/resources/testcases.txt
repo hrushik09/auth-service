@@ -1,0 +1,6 @@
+[ ] POST /users request body, authorities should be unique
+[ ] POST /users request body, password should be secure
+[ ] add equals, hashCode methods for Authority, User
+[ ] fetch User by id
+[ ] add @WithAnonymousUser for 401 tests
+[ ] check notNullValue

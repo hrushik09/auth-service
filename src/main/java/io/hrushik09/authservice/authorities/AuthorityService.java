@@ -35,4 +35,9 @@ public class AuthorityService {
                 .map(AuthorityDTO::from)
                 .orElseThrow(() -> new AuthorityDoesNotExist(id));
     }
+
+    public Authority fetchByName(String name) {
+        return authorityRepository.findByName(name)
+                .orElseThrow(() -> new AuthorityDoesNotExist(name));
+    }
 }

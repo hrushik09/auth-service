@@ -47,9 +47,9 @@ class AuthorityServiceTest {
         }
 
         @Test
-        void shouldSaveInRepositoryWhenCreatingAuthority() {
+        void shouldSaveUsingRepositoryWhenCreatingAuthority() {
             String name = "api:write";
-            when(authorityRepository.save(any()))
+            when(authorityRepository.save(any(Authority.class)))
                     .thenReturn(anAuthority().withName(name).build());
 
             authorityService.create(new CreateAuthorityCommand(name));
@@ -63,7 +63,7 @@ class AuthorityServiceTest {
         @Test
         void shouldReturnCreatedAuthority() {
             String name = "api:update";
-            when(authorityRepository.save(any()))
+            when(authorityRepository.save(any(Authority.class)))
                     .thenReturn(anAuthority().withName(name).build());
 
             CreateAuthorityResponse created = authorityService.create(new CreateAuthorityCommand(name));
@@ -101,6 +101,35 @@ class AuthorityServiceTest {
             assertThat(fetched.name()).isEqualTo(name);
             assertThat(fetched.createdAt()).isNotNull();
             assertThat(fetched.updatedAt()).isNotNull();
+        }
+    }
+
+    @Nested
+    class FetchByName {
+        @Test
+        void shouldThrowWhenFetchingNonExistingAuthority() {
+            String doesNotExistAuthority = "doesNotExistAuthority";
+            when(authorityRepository.findByName(doesNotExistAuthority))
+                    .thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> authorityService.fetchByName(doesNotExistAuthority))
+                    .isInstanceOf(AuthorityDoesNotExist.class)
+                    .hasMessage("Authority with name " + doesNotExistAuthority + " does not exist");
+        }
+
+        @Test
+        void shouldFetchAuthorityByName() {
+            String name = "api:update";
+            when(authorityRepository.findByName(name))
+                    .thenReturn(Optional.of(anAuthority().withName(name).build()));
+
+            Authority authority = authorityService.fetchByName(name);
+
+            assertThat(authority).isNotNull();
+            assertThat(authority.getId()).isNotNull();
+            assertThat(authority.getName()).isEqualTo(name);
+            assertThat(authority.getCreatedAt()).isNotNull();
+            assertThat(authority.getUpdatedAt()).isNotNull();
         }
     }
 }

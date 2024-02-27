@@ -42,7 +42,13 @@ public class AuthorityControllerTest {
         class AuthFailure {
             @Test
             void shouldReturn401WhenNotAuthenticated() throws Exception {
-                mockMvc.perform(post("/api/authorities"))
+                mockMvc.perform(post("/api/authorities")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "name": "anyRandomName"
+                                        }
+                                        """))
                         .andExpect(status().isUnauthorized());
             }
 
@@ -78,7 +84,7 @@ public class AuthorityControllerTest {
         class AuthSuccess {
             @Test
             void shouldThrowWhenAuthorityWithNameAlreadyExists() throws Exception {
-                when(authorityService.create(any())).thenThrow(new AuthorityAlreadyExists("duplicateAuthority"));
+                when(authorityService.create(any(CreateAuthorityCommand.class))).thenThrow(new AuthorityAlreadyExists("duplicateAuthority"));
 
                 mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)
