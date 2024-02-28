@@ -66,4 +66,16 @@ public class CreateUserRequestTest {
         assertThat(violations).extracting("message")
                 .containsExactly("each authority name should be non-empty");
     }
+
+    @Test
+    void authoritiesListShouldContainUniqueEntries() {
+        List<String> authorities = List.of("firstUnique", "firstDuplicate", "secondDuplicate", "firstDuplicate", "secondUnique", "secondDuplicate");
+        CreateUserRequest request = new CreateUserRequest("random-username", "random-password", authorities);
+
+        Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
+
+        assertThat(violations).hasSize(1);
+        assertThat(violations).extracting("message")
+                .containsExactly("authorities should be unique");
+    }
 }
