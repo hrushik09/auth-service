@@ -1,6 +1,7 @@
 package io.hrushik09.authservice.clients;
 
 import io.hrushik09.authservice.clients.dto.CreateClientCommand;
+import io.hrushik09.authservice.clients.dto.CreateClientResponse;
 import io.hrushik09.authservice.clients.exceptions.ClientIdAlreadyExistsException;
 import io.hrushik09.authservice.clients.exceptions.IdAlreadyExistsException;
 import io.hrushik09.authservice.config.SecurityConfig;
@@ -110,6 +111,34 @@ public class ClientControllerTest {
                                         """))
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.error", equalTo("Client with clientId duplicateClientId already exists")));
+            }
+
+            @Test
+            void shouldCreateClient() throws Exception {
+                CreateClientCommand cmd = new CreateClientCommand("rc", "client1", "secret", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "OPENID", "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
+                CreateClientResponse response = new CreateClientResponse("rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "OPENID", "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
+                when(clientService.create(cmd)).thenReturn(response);
+
+                mockMvc.perform(post("/api/clients")
+                                .contentType(APPLICATION_JSON)
+                                .content("""
+                                        {
+                                        "id": "rc",
+                                        "clientId": "client1",
+                                        "clientSecret": "secret",
+                                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                                        "scope": "OPENID",
+                                        "redirectUri": "http://localhost:8080/authorized",
+                                        "authorizationGrantType": "AUTHORIZATION_CODE"
+                                        }
+                                        """))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id", equalTo("rc")))
+                        .andExpect(jsonPath("$.clientId", equalTo("client1")))
+                        .andExpect(jsonPath("$.clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC")))
+                        .andExpect(jsonPath("$.scope", equalTo("OPENID")))
+                        .andExpect(jsonPath("$.redirectUri", equalTo("http://localhost:8080/authorized")))
+                        .andExpect(jsonPath("$.authorizationGrantType", equalTo("AUTHORIZATION_CODE")));
             }
         }
     }
