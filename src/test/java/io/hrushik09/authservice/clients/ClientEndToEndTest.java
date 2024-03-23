@@ -32,9 +32,9 @@ public class ClientEndToEndTest {
                             "id": "rc",
                             "clientId": "client",
                             "clientSecret": "secret",
+                            "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
                             "scope": "OPENID",
                             "redirectUri": "http://localhost:8080/authorized",
-                            "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
                             "authorizationGrantType": "AUTHORIZATION_CODE"
                             }
                             """)
