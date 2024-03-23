@@ -33,11 +33,10 @@ class UserServiceTest {
     private UserRepository userRepository;
     @Mock
     private AuthorityService authorityService;
-    PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
-        passwordEncoder = new BCryptPasswordEncoder();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         userService = new UserService(userRepository, authorityService, passwordEncoder);
     }
 

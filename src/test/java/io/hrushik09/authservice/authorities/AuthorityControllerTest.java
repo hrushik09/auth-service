@@ -40,15 +40,19 @@ public class AuthorityControllerTest {
     class Create {
         @Nested
         class AuthFailure {
+            private static String getRandomContent() {
+                return """
+                        {
+                        "name": "anyRandomName"
+                        }
+                        """;
+            }
+
             @Test
             void shouldReturn401WhenNotAuthenticated() throws Exception {
                 mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {
-                                        "name": "anyRandomName"
-                                        }
-                                        """))
+                                .content(getRandomContent()))
                         .andExpect(status().isUnauthorized());
             }
 
@@ -57,11 +61,7 @@ public class AuthorityControllerTest {
             void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
                 mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {
-                                        "name": "anyRandomName"
-                                        }
-                                        """))
+                                .content(getRandomContent()))
                         .andExpect(status().isForbidden());
             }
 
@@ -70,11 +70,7 @@ public class AuthorityControllerTest {
             void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
                 mockMvc.perform(post("/api/authorities")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("""
-                                        {
-                                        "name": "anyRandomName"
-                                        }
-                                        """))
+                                .content(getRandomContent()))
                         .andExpect(status().isForbidden());
             }
         }
