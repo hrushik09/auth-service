@@ -26,6 +26,15 @@ public class AuthorityBuilder {
         return new AuthorityBuilder(this);
     }
 
+    public Authority build() {
+        Authority authority = new Authority();
+        authority.setId(id);
+        authority.setName(name);
+        authority.setCreatedAt(createdAt);
+        authority.setUpdatedAt(updatedAt);
+        return authority;
+    }
+
     public AuthorityBuilder withId(Integer id) {
         this.id = id;
         return this;
@@ -44,14 +53,5 @@ public class AuthorityBuilder {
     public AuthorityBuilder withUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
         return this;
-    }
-
-    public Authority build() {
-        Authority authority = new Authority();
-        authority.setId(id);
-        authority.setName(name);
-        authority.setCreatedAt(createdAt);
-        authority.setUpdatedAt(updatedAt);
-        return authority;
     }
 }

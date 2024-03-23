@@ -38,19 +38,23 @@ public class UserControllerTest {
     class Create {
         @Nested
         class AuthFailure {
+            private static String getRandomContent() {
+                return """
+                        {
+                        "username": "randomUsername",
+                        "password": "randomPassword",
+                        "authorities": [
+                            "randomAuthority"
+                        ]
+                        }
+                        """;
+            }
+
             @Test
             void shouldReturn401WhenNotAuthenticated() throws Exception {
                 mockMvc.perform(post("/api/users")
                                 .contentType(APPLICATION_JSON)
-                                .content("""
-                                        {
-                                        "username": "randomUsername",
-                                        "password": "randomPassword",
-                                        "authorities": [
-                                            "randomAuthority"
-                                        ]
-                                        }
-                                        """))
+                                .content(getRandomContent()))
                         .andExpect(status().isUnauthorized());
             }
 
@@ -59,15 +63,7 @@ public class UserControllerTest {
             void shouldReturn403WhenUsernameIsNotDefaultAdmin() throws Exception {
                 mockMvc.perform(post("/api/users")
                                 .contentType(APPLICATION_JSON)
-                                .content("""
-                                        {
-                                        "username": "randomUsername",
-                                        "password": "randomPassword",
-                                        "authorities": [
-                                            "randomAuthority"
-                                        ]
-                                        }
-                                        """))
+                                .content(getRandomContent()))
                         .andExpect(status().isForbidden());
             }
 
@@ -76,15 +72,7 @@ public class UserControllerTest {
             void shouldReturn403WhenUsernameIsDefaultAdminButDoesNotHaveDefaultAdminAuthority() throws Exception {
                 mockMvc.perform(post("/api/users")
                                 .contentType(APPLICATION_JSON)
-                                .content("""
-                                        {
-                                        "username": "randomUsername",
-                                        "password": "randomPassword",
-                                        "authorities": [
-                                            "randomAuthority"
-                                        ]
-                                        }
-                                        """))
+                                .content(getRandomContent()))
                         .andExpect(status().isForbidden());
             }
         }
