@@ -10,6 +10,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @EndToEndTest
 public class ClientEndToEndTest {
@@ -29,7 +30,7 @@ public class ClientEndToEndTest {
                     .contentType(ContentType.JSON)
                     .body("""
                             {
-                            "id": "rc",
+                            "pid": "rc",
                             "clientId": "client",
                             "clientSecret": "secret",
                             "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
@@ -42,7 +43,8 @@ public class ClientEndToEndTest {
                     .post("/api/clients")
                     .then()
                     .statusCode(201)
-                    .body("id", equalTo("rc"))
+                    .body("id", notNullValue())
+                    .body("pid", equalTo("rc"))
                     .body("clientId", equalTo("client"))
                     .body("clientSecret", equalTo("secret"))
                     .body("scope", equalTo("OPENID"))

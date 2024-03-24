@@ -3,7 +3,7 @@ package io.hrushik09.authservice.clients.dto;
 import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
 
 public class CreateClientRequestBuilder {
-    private String id = "someId";
+    private String pid = "somePid";
     private String clientId = "someClientId";
     private String clientSecret = "someClientSecret";
     private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
@@ -15,7 +15,7 @@ public class CreateClientRequestBuilder {
     }
 
     private CreateClientRequestBuilder(CreateClientRequestBuilder copy) {
-        this.id = copy.id;
+        this.pid = copy.pid;
         this.clientId = copy.clientId;
         this.clientSecret = copy.clientSecret;
         this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
@@ -33,11 +33,11 @@ public class CreateClientRequestBuilder {
     }
 
     public CreateClientRequest build() {
-        return new CreateClientRequest(id, clientId, clientSecret, clientAuthenticationMethod, scope, redirectUri, authorizationGrantType);
+        return new CreateClientRequest(pid, clientId, clientSecret, clientAuthenticationMethod, scope, redirectUri, authorizationGrantType);
     }
 
-    public CreateClientRequestBuilder withId(String id) {
-        this.id = id;
+    public CreateClientRequestBuilder withPid(String pid) {
+        this.pid = pid;
         return this;
     }
 

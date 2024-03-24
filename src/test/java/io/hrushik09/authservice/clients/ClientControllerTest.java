@@ -3,7 +3,7 @@ package io.hrushik09.authservice.clients;
 import io.hrushik09.authservice.clients.dto.CreateClientCommand;
 import io.hrushik09.authservice.clients.dto.CreateClientResponse;
 import io.hrushik09.authservice.clients.exceptions.ClientIdAlreadyExistsException;
-import io.hrushik09.authservice.clients.exceptions.IdAlreadyExistsException;
+import io.hrushik09.authservice.clients.exceptions.PidAlreadyExistsException;
 import io.hrushik09.authservice.config.SecurityConfig;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -37,7 +38,7 @@ public class ClientControllerTest {
             private static String getRandomContent() {
                 return """
                         {
-                        "id": "randomId",
+                        "pid": "randomPid",
                         "clientId": "randomClientId",
                         "clientSecret": "randomSecret",
                         "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
@@ -72,13 +73,13 @@ public class ClientControllerTest {
             @Test
             void shouldNotCreateClientWhenIdAlreadyExists() throws Exception {
                 when(clientService.create(any(CreateClientCommand.class)))
-                        .thenThrow(new IdAlreadyExistsException("duplicateId"));
+                        .thenThrow(new PidAlreadyExistsException("duplicatePid"));
 
                 mockMvc.perform(post("/api/clients")
                                 .contentType(APPLICATION_JSON)
                                 .content("""
                                         {
-                                        "id": "duplicateId",
+                                        "pid": "duplicatePid",
                                         "clientId": "randomClientId",
                                         "clientSecret": "randomSecret",
                                         "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
@@ -88,7 +89,7 @@ public class ClientControllerTest {
                                         }
                                         """))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.error", equalTo("Client with id duplicateId already exists")));
+                        .andExpect(jsonPath("$.error", equalTo("Client with pid duplicatePid already exists")));
             }
 
             @Test
@@ -100,7 +101,7 @@ public class ClientControllerTest {
                                 .contentType(APPLICATION_JSON)
                                 .content("""
                                         {
-                                        "id": "randomId",
+                                        "pid": "randomPid",
                                         "clientId": "duplicateClientId",
                                         "clientSecret": "randomSecret",
                                         "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
@@ -116,14 +117,14 @@ public class ClientControllerTest {
             @Test
             void shouldCreateClient() throws Exception {
                 CreateClientCommand cmd = new CreateClientCommand("rc", "client1", "secret", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "OPENID", "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
-                CreateClientResponse response = new CreateClientResponse("rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "OPENID", "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
+                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "OPENID", "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
                 when(clientService.create(cmd)).thenReturn(response);
 
                 mockMvc.perform(post("/api/clients")
                                 .contentType(APPLICATION_JSON)
                                 .content("""
                                         {
-                                        "id": "rc",
+                                        "pid": "rc",
                                         "clientId": "client1",
                                         "clientSecret": "secret",
                                         "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
@@ -133,7 +134,8 @@ public class ClientControllerTest {
                                         }
                                         """))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.id", equalTo("rc")))
+                        .andExpect(jsonPath("$.id", notNullValue()))
+                        .andExpect(jsonPath("$.pid", equalTo("rc")))
                         .andExpect(jsonPath("$.clientId", equalTo("client1")))
                         .andExpect(jsonPath("$.clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC")))
                         .andExpect(jsonPath("$.scope", equalTo("OPENID")))

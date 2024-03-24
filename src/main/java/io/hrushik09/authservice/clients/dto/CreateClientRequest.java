@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateClientRequest(
-        @NotBlank(message = "id should be non-blank")
-        String id,
+        @NotBlank(message = "pid should be non-blank")
+        String pid,
         @NotBlank(message = "clientId should be non-blank")
         String clientId,
         @NotBlank(message = "clientSecret should be non-blank")

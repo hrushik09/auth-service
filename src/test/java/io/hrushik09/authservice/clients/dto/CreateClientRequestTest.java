@@ -23,17 +23,17 @@ public class CreateClientRequestTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    void idShouldBeNonEmpty(String id) {
-        CreateClientRequest request = aRequest().withId(id).build();
+    void pidShouldBeNonEmpty(String id) {
+        CreateClientRequest request = aRequest().withPid(id).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "id should be non-blank");
+        hasSingleMessage(violations, "pid should be non-blank");
     }
 
     @Test
-    void idShouldBeNonBlank() {
-        CreateClientRequest request = aRequest().withId("   ").build();
+    void pidShouldBeNonBlank() {
+        CreateClientRequest request = aRequest().withPid("   ").build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "id should be non-blank");
+        hasSingleMessage(violations, "pid should be non-blank");
     }
 
     @ParameterizedTest

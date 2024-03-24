@@ -3,7 +3,8 @@ package io.hrushik09.authservice.clients.dto;
 import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
 
 public record CreateClientResponse(
-        String id,
+        Integer id,
+        String pid,
         String clientId,
         ClientAuthenticationMethod clientAuthenticationMethod,
         String scope,
