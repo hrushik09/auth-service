@@ -71,7 +71,7 @@ public class ClientControllerTest {
         @WithMockUser(authorities = "clients:create")
         class AuthSuccess {
             @Test
-            void shouldNotCreateClientWhenIdAlreadyExists() throws Exception {
+            void shouldNotCreateClientWhenPidAlreadyExists() throws Exception {
                 when(clientService.create(any(CreateClientCommand.class)))
                         .thenThrow(new PidAlreadyExistsException("duplicatePid"));
 
