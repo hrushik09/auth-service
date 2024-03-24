@@ -10,4 +10,8 @@ public class ClientRepository {
     public Optional<Client> findByClientId(String clientId) {
         return Optional.empty();
     }
+
+    public Client save(Client client) {
+        return null;
+    }
 }

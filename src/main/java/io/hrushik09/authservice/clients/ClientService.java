@@ -21,6 +21,15 @@ public class ClientService {
                 .ifPresent(client -> {
                     throw new ClientIdAlreadyExistsException(cmd.clientId());
                 });
-        return null;
+        Client client = new Client();
+        client.setPid(cmd.pid());
+        client.setClientId(cmd.clientId());
+        client.setClientSecret(cmd.clientSecret());
+        client.setClientAuthenticationMethod(cmd.clientAuthenticationMethod());
+        client.setScope(cmd.scope());
+        client.setRedirectUri(cmd.redirectUri());
+        client.setAuthorizationGrantType(cmd.authorizationGrantType());
+        Client saved = clientRepository.save(client);
+        return CreateClientResponse.from(saved);
     }
 }
