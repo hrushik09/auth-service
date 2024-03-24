@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static io.hrushik09.authservice.clients.ClientBuilder.aClient;
+import static io.hrushik09.authservice.clients.dto.CreateClientCommandBuilder.aCommand;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +36,7 @@ class ClientServiceTest {
             when(clientRepository.findByPid(duplicatePid))
                     .thenReturn(Optional.of(aClient().withPid(duplicatePid).build()));
 
-            CreateClientCommand cmd = new CreateClientCommand(duplicatePid, "randomClientId", "randomClientSecret", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "randomScope", "randomRedirectUri", "randomGrantType");
+            CreateClientCommand cmd = aCommand().withPid(duplicatePid).build();
             assertThatThrownBy(() -> clientService.create(cmd))
                     .isInstanceOf(PidAlreadyExistsException.class)
                     .hasMessage("Client with pid " + duplicatePid + " already exists");
@@ -47,7 +48,7 @@ class ClientServiceTest {
             when(clientRepository.findByClientId(duplicateClientId))
                     .thenReturn(Optional.of(aClient().withClientId(duplicateClientId).build()));
 
-            CreateClientCommand cmd = new CreateClientCommand("randomPid", duplicateClientId, "randomClientSecret", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "randomScope", "randomRedirectUri", "randomGrantType");
+            CreateClientCommand cmd = aCommand().withClientId(duplicateClientId).build();
             assertThatThrownBy(() -> clientService.create(cmd))
                     .isInstanceOf(ClientIdAlreadyExistsException.class)
                     .hasMessage("Client with clientId " + duplicateClientId + " already exists");
