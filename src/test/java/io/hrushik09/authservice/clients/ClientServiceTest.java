@@ -11,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -30,7 +32,8 @@ class ClientServiceTest {
 
     @BeforeEach
     void setUp() {
-        clientService = new ClientService(clientRepository);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        clientService = new ClientService(clientRepository, passwordEncoder);
     }
 
     @Nested
@@ -92,7 +95,7 @@ class ClientServiceTest {
             Client captorValue = clientArgumentCaptor.getValue();
             assertThat(captorValue.getPid()).isEqualTo(pid);
             assertThat(captorValue.getClientId()).isEqualTo(clientId);
-            assertThat(captorValue.getClientSecret()).isEqualTo(clientSecret);
+            assertThat(captorValue.getClientSecret()).isNotNull();
             assertThat(captorValue.getClientAuthenticationMethod()).isEqualTo(clientAuthenticationMethod);
             assertThat(captorValue.getScope()).isEqualTo(scope);
             assertThat(captorValue.getRedirectUri()).isEqualTo(redirectUri);

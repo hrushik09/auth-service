@@ -4,6 +4,7 @@ import io.hrushik09.authservice.clients.dto.CreateClientCommand;
 import io.hrushik09.authservice.clients.dto.CreateClientResponse;
 import io.hrushik09.authservice.clients.exceptions.ClientIdAlreadyExistsException;
 import io.hrushik09.authservice.clients.exceptions.PidAlreadyExistsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
         this.clientRepository = clientRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -29,7 +32,7 @@ public class ClientService {
         Client client = new Client();
         client.setPid(cmd.pid());
         client.setClientId(cmd.clientId());
-        client.setClientSecret(cmd.clientSecret());
+        client.setClientSecret(passwordEncoder.encode(cmd.clientSecret()));
         client.setClientAuthenticationMethod(cmd.clientAuthenticationMethod());
         client.setScope(cmd.scope());
         client.setRedirectUri(cmd.redirectUri());
