@@ -1,5 +1,7 @@
 package io.hrushik09.authservice.clients;
 
+import java.time.Instant;
+
 public class ClientBuilder {
     private Integer id = 23;
     private String pid = "somePid";
@@ -9,6 +11,8 @@ public class ClientBuilder {
     private String scope = "someScope";
     private String redirectUri = "someRedirectUri";
     private String authorizationGrantType = "someAuthorizationGrantType";
+    private Instant createdAt = Instant.parse("2024-01-12T04:03:03Z");
+    private Instant updatedAt = Instant.parse("2024-01-12T03:04:04Z");
 
     private ClientBuilder() {
     }
@@ -22,6 +26,8 @@ public class ClientBuilder {
         this.scope = copy.scope;
         this.redirectUri = copy.redirectUri;
         this.authorizationGrantType = copy.authorizationGrantType;
+        this.createdAt = copy.createdAt;
+        this.updatedAt = copy.updatedAt;
     }
 
     public static ClientBuilder aClient() {
@@ -42,6 +48,8 @@ public class ClientBuilder {
         client.setScope(scope);
         client.setRedirectUri(redirectUri);
         client.setAuthorizationGrantType(authorizationGrantType);
+        client.setCreatedAt(createdAt);
+        client.setUpdatedAt(updatedAt);
         return client;
     }
 
@@ -82,6 +90,16 @@ public class ClientBuilder {
 
     public ClientBuilder withAuthorizationGrantType(String authorizationGrantType) {
         this.authorizationGrantType = authorizationGrantType;
+        return this;
+    }
+
+    public ClientBuilder withCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public ClientBuilder withUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
         return this;
     }
 }

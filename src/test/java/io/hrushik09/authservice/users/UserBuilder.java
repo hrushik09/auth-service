@@ -35,6 +35,19 @@ public class UserBuilder {
         return new UserBuilder(this);
     }
 
+    public User build() {
+        User user = new User();
+        user.setId(id);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setAuthorities(authorityBuilders.stream()
+                .map(AuthorityBuilder::build)
+                .collect(Collectors.toUnmodifiableSet()));
+        user.setCreatedAt(createdAt);
+        user.setUpdatedAt(updatedAt);
+        return user;
+    }
+
     public UserBuilder withId(Integer id) {
         this.id = id;
         return this;
@@ -63,18 +76,5 @@ public class UserBuilder {
     public UserBuilder withUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
         return this;
-    }
-
-    public User build() {
-        User user = new User();
-        user.setId(id);
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setAuthorities(authorityBuilders.stream()
-                .map(AuthorityBuilder::build)
-                .collect(Collectors.toUnmodifiableSet()));
-        user.setCreatedAt(createdAt);
-        user.setUpdatedAt(updatedAt);
-        return user;
     }
 }

@@ -1,17 +1,14 @@
 package io.hrushik09.authservice.clients;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.Optional;
 
-public class ClientRepository {
-    public Optional<Client> findByPid(String pid) {
-        return Optional.empty();
-    }
+public interface ClientRepository extends JpaRepository<Client, Integer> {
+    @Query("SELECT c FROM Client c WHERE c.pid = :pid")
+    Optional<Client> findByPid(String pid);
 
-    public Optional<Client> findByClientId(String clientId) {
-        return Optional.empty();
-    }
-
-    public Client save(Client client) {
-        return null;
-    }
+    @Query("SELECT c FROM Client c WHERE c.clientId = :clientId")
+    Optional<Client> findByClientId(String clientId);
 }

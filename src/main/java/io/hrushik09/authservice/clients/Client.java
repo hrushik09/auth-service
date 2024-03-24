@@ -1,14 +1,34 @@
 package io.hrushik09.authservice.clients;
 
+import jakarta.persistence.*;
+
+import java.time.Instant;
+
+@Entity
+@Table(name = "clients")
 public class Client {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false, unique = true)
     private String pid;
+    @Column(nullable = false, unique = true)
     private String clientId;
+    @Column(nullable = false)
     private String clientSecret;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private ClientAuthenticationMethod clientAuthenticationMethod;
+    @Column(nullable = false)
     private String scope;
+    @Column(nullable = false)
     private String redirectUri;
+    @Column(nullable = false)
     private String authorizationGrantType;
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Instant createdAt;
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Instant updatedAt;
 
     public Integer getId() {
         return id;
@@ -72,5 +92,21 @@ public class Client {
 
     public void setAuthorizationGrantType(String authorizationGrantType) {
         this.authorizationGrantType = authorizationGrantType;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
