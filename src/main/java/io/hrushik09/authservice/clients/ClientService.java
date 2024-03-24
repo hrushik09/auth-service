@@ -4,7 +4,11 @@ import io.hrushik09.authservice.clients.dto.CreateClientCommand;
 import io.hrushik09.authservice.clients.dto.CreateClientResponse;
 import io.hrushik09.authservice.clients.exceptions.ClientIdAlreadyExistsException;
 import io.hrushik09.authservice.clients.exceptions.PidAlreadyExistsException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional(readOnly = true)
 public class ClientService {
     private final ClientRepository clientRepository;
 
@@ -12,6 +16,7 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
+    @Transactional
     public CreateClientResponse create(CreateClientCommand cmd) {
         clientRepository.findByPid(cmd.pid())
                 .ifPresent(client -> {
