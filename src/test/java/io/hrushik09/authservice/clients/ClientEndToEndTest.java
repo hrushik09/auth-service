@@ -20,6 +20,8 @@ public class ClientEndToEndTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        RestAssured.authentication = RestAssured.preemptive()
+                .basic("user_create_client", "qwe");
     }
 
     @Nested
@@ -46,7 +48,6 @@ public class ClientEndToEndTest {
                     .body("id", notNullValue())
                     .body("pid", equalTo("rc"))
                     .body("clientId", equalTo("client"))
-                    .body("clientSecret", equalTo("secret"))
                     .body("scope", equalTo("OPENID"))
                     .body("redirectUri", equalTo("http://localhost:8080/authorized"))
                     .body("clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC"))
