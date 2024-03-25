@@ -1,6 +1,6 @@
 package io.hrushik09.authservice.users.dto;
 
-import io.hrushik09.authservice.users.validation.UniqueEntriesConstraint;
+import io.hrushik09.authservice.validation.UniqueEntriesConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -11,7 +11,7 @@ public record CreateUserRequest(
         String username,
         @NotBlank(message = "password should be non-blank")
         String password,
-        @Size(min = 1, message = "should have at least one authority")
+        @Size(min = 1, message = "should contain at least one authority")
         @UniqueEntriesConstraint(message = "authorities should be unique")
         List<@NotBlank(message = "each authority name should be non-blank") String> authorities
 ) {

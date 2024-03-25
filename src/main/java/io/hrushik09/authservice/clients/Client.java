@@ -3,6 +3,8 @@ package io.hrushik09.authservice.clients;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "clients")
@@ -19,8 +21,9 @@ public class Client {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private ClientAuthenticationMethod clientAuthenticationMethod;
-    @Column(nullable = false)
-    private String scope;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "client_id", nullable = false)
+    private List<ClientScope> clientScopes = new ArrayList<>();
     @Column(nullable = false)
     private String redirectUri;
     @Column(nullable = false)
@@ -70,12 +73,12 @@ public class Client {
         this.clientAuthenticationMethod = clientAuthenticationMethod;
     }
 
-    public String getScope() {
-        return scope;
+    public List<ClientScope> getClientScopes() {
+        return clientScopes;
     }
 
-    public void setScope(String scope) {
-        this.scope = scope;
+    public void setClientScopes(List<ClientScope> clientScopes) {
+        this.clientScopes = clientScopes;
     }
 
     public String getRedirectUri() {

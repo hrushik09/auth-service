@@ -1,4 +1,4 @@
-package io.hrushik09.authservice.users.validation;
+package io.hrushik09.authservice.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = UniqueEntriesConstraintValidator.class)
 public @interface UniqueEntriesConstraint {
-    public String message() default "";
+    String message() default "";
 
     Class<?>[] groups() default {};
 

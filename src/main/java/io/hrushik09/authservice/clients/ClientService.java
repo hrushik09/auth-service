@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class ClientService {
@@ -34,7 +36,10 @@ public class ClientService {
         client.setClientId(cmd.clientId());
         client.setClientSecret(passwordEncoder.encode(cmd.clientSecret()));
         client.setClientAuthenticationMethod(cmd.clientAuthenticationMethod());
-        client.setScope(cmd.scope());
+        List<ClientScope> clientScopes = cmd.scopes().stream()
+                .map(ClientScope::new)
+                .toList();
+        client.setClientScopes(clientScopes);
         client.setRedirectUri(cmd.redirectUri());
         client.setAuthorizationGrantType(cmd.authorizationGrantType());
         Client saved = clientRepository.save(client);

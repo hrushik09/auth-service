@@ -2,12 +2,14 @@ package io.hrushik09.authservice.clients.dto;
 
 import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
 
+import java.util.List;
+
 public class CreateClientCommandBuilder {
     private String pid = "somePid";
     private String clientId = "someClientId";
     private String clientSecret = "someClientSecret";
     private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
-    private String scope = "someScope";
+    private List<String> scopes = List.of("OPENID");
     private String redirectUri = "someRedirectUri";
     private String authorizationGrantType = "someAuthorizationGrantType";
 
@@ -19,7 +21,7 @@ public class CreateClientCommandBuilder {
         this.clientId = copy.clientId;
         this.clientSecret = copy.clientSecret;
         this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
-        this.scope = copy.scope;
+        this.scopes = copy.scopes;
         this.redirectUri = copy.redirectUri;
         this.authorizationGrantType = copy.authorizationGrantType;
     }
@@ -33,7 +35,7 @@ public class CreateClientCommandBuilder {
     }
 
     public CreateClientCommand build() {
-        return new CreateClientCommand(pid, clientId, clientSecret, clientAuthenticationMethod, scope, redirectUri, authorizationGrantType);
+        return new CreateClientCommand(pid, clientId, clientSecret, clientAuthenticationMethod, scopes, redirectUri, authorizationGrantType);
     }
 
     public CreateClientCommandBuilder withPid(String pid) {
@@ -56,8 +58,8 @@ public class CreateClientCommandBuilder {
         return this;
     }
 
-    public CreateClientCommandBuilder withScope(String scope) {
-        this.scope = scope;
+    public CreateClientCommandBuilder withScopes(List<String> scopes) {
+        this.scopes = scopes;
         return this;
     }
 

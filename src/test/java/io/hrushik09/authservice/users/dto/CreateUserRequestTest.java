@@ -58,7 +58,7 @@ public class CreateUserRequestTest {
         List<String> authorities = List.of();
         CreateUserRequest request = aRequest().withAuthorities(authorities).build();
         Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "should have at least one authority");
+        hasSingleMessage(violations, "should contain at least one authority");
     }
 
     @ParameterizedTest
