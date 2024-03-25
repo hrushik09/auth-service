@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static io.hrushik09.authservice.clients.dto.CreateClientRequestBuilder.aRequest;
@@ -73,19 +75,39 @@ public class CreateClientRequestTest {
         hasSingleMessage(violations, "clientAuthenticationMethod should be non-null");
     }
 
+    @Test
+    void scopesShouldContainAtLeastOneElement() {
+        List<String> scopes = List.of();
+        CreateClientRequest request = aRequest().withScopes(scopes).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasSingleMessage(violations, "should contain at least one scope");
+    }
+
     @ParameterizedTest
     @NullAndEmptySource
-    void scopeShouldBeNonEmpty(String scope) {
-        CreateClientRequest request = aRequest().withScope(scope).build();
+    void eachScopeShouldBeNonEmpty(String scope) {
+        List<String> scopes = new ArrayList<>();
+        scopes.add(scope);
+        CreateClientRequest request = aRequest().withScopes(scopes).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "scope should be non-blank");
+        hasSingleMessage(violations, "each scope should be non-blank");
     }
 
     @Test
-    void scopeShouldBeNonBlank() {
-        CreateClientRequest request = aRequest().withScope("   ").build();
+    void eachScopeShouldBeNonBlank() {
+        List<String> scopes = new ArrayList<>();
+        scopes.add("    ");
+        CreateClientRequest request = aRequest().withScopes(scopes).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "scope should be non-blank");
+        hasSingleMessage(violations, "each scope should be non-blank");
+    }
+
+    @Test
+    void scopesListShouldContainUniqueEntries() {
+        List<String> scopes = List.of("firstDuplicateScope", "firstUniqueScope", "firstDuplicateScope", "secondDuplicateScope", "secondDuplicateScope");
+        CreateClientRequest request = aRequest().withScopes(scopes).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasSingleMessage(violations, "scopes should be unique");
     }
 
     @ParameterizedTest
