@@ -1,6 +1,6 @@
 package io.hrushik09.authservice.users.dto;
 
-import io.hrushik09.authservice.users.validation.UniqueEntriesConstraint;
+import io.hrushik09.authservice.validation.UniqueEntriesConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 

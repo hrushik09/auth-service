@@ -1,4 +1,4 @@
-package io.hrushik09.authservice.users.validation;
+package io.hrushik09.authservice.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
