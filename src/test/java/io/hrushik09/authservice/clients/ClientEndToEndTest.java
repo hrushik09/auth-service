@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 @EndToEndTest
 public class ClientEndToEndTest {
@@ -36,7 +35,11 @@ public class ClientEndToEndTest {
                             "clientId": "client",
                             "clientSecret": "secret",
                             "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
-                            "scope": "OPENID",
+                            "scope": [
+                            "OPENID",
+                            "api:read",
+                            "api:create"
+                            ],
                             "redirectUri": "http://localhost:8080/authorized",
                             "authorizationGrantType": "AUTHORIZATION_CODE"
                             }
@@ -48,7 +51,8 @@ public class ClientEndToEndTest {
                     .body("id", notNullValue())
                     .body("pid", equalTo("rc"))
                     .body("clientId", equalTo("client"))
-                    .body("scope", equalTo("OPENID"))
+                    .body("scopes", hasSize(3))
+                    .body("scopes", containsInAnyOrder("OPENID", "api:read", "api:create"))
                     .body("redirectUri", equalTo("http://localhost:8080/authorized"))
                     .body("clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC"))
                     .body("authorizationGrantType", equalTo("AUTHORIZATION_CODE"));
