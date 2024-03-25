@@ -9,7 +9,7 @@ public class CreateClientRequestBuilder {
     private String clientId = "someClientId";
     private String clientSecret = "someClientSecret";
     private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
-    private List<String> scopes = List.of("someScope");
+    private List<String> scopes = List.of("OPENID");
     private String redirectUri = "someRedirectUri";
     private String authorizationGrantType = "someAuthorizationGrantType";
 

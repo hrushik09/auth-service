@@ -1,6 +1,7 @@
 package io.hrushik09.authservice.clients.dto;
 
 import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
+import io.hrushik09.authservice.validation.ListContainsGivenStringConstraint;
 import io.hrushik09.authservice.validation.UniqueEntriesConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public record CreateClientRequest(
         ClientAuthenticationMethod clientAuthenticationMethod,
         @Size(min = 1, message = "should contain at least one scope")
         @UniqueEntriesConstraint(message = "scopes should be unique")
+        @ListContainsGivenStringConstraint(required = "OPENID", message = "scopes should contain OPENID scope")
         List<@NotBlank(message = "each scope should be non-blank") String> scopes,
         @NotBlank(message = "redirectUri should be non-blank")
         String redirectUri,
