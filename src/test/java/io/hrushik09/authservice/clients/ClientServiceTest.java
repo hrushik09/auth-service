@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.Optional;
 
 import static io.hrushik09.authservice.clients.ClientBuilder.aClient;
@@ -85,7 +86,7 @@ class ClientServiceTest {
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
-                    .withScope(scope)
+                    .withScopes(List.of(scope))
                     .withRedirectUri(redirectUri)
                     .withAuthorizationGrantType(authorizationGrantType).build();
             clientService.create(cmd);
@@ -125,7 +126,7 @@ class ClientServiceTest {
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
-                    .withScope(scope)
+                    .withScopes(List.of(scope))
                     .withRedirectUri(redirectUri)
                     .withAuthorizationGrantType(authorizationGrantType).build();
             CreateClientResponse created = clientService.create(cmd);
@@ -134,7 +135,7 @@ class ClientServiceTest {
             assertThat(created.pid()).isEqualTo(pid);
             assertThat(created.clientId()).isEqualTo(clientId);
             assertThat(created.clientAuthenticationMethod()).isEqualTo(clientAuthenticationMethod);
-            assertThat(created.scope()).isEqualTo(scope);
+            assertThat(created.scopes().getFirst()).isEqualTo(scope);
             assertThat(created.redirectUri()).isEqualTo(redirectUri);
             assertThat(created.authorizationGrantType()).isEqualTo(authorizationGrantType);
         }

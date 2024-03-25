@@ -14,8 +14,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import java.util.List;
+
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -42,7 +43,9 @@ public class ClientControllerTest {
                         "clientId": "randomClientId",
                         "clientSecret": "randomSecret",
                         "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
-                        "scope": "randomScope",
+                        "scopes": [
+                        "OPENID"
+                        ],
                         "redirectUri": "randomRedirectUri",
                         "authorizationGrantType": "randomAuthorizationGrantType"
                         }
@@ -83,7 +86,9 @@ public class ClientControllerTest {
                                         "clientId": "randomClientId",
                                         "clientSecret": "randomSecret",
                                         "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
-                                        "scope": "randomScope",
+                                        "scopes": [
+                                        "OPENID"
+                                        ],
                                         "redirectUri": "randomRedirectUri",
                                         "authorizationGrantType": "randomAuthorizationGrantType"
                                         }
@@ -105,7 +110,9 @@ public class ClientControllerTest {
                                         "clientId": "duplicateClientId",
                                         "clientSecret": "randomSecret",
                                         "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
-                                        "scope": "randomScope",
+                                        "scopes": [
+                                        "OPENID"
+                                        ],
                                         "redirectUri": "randomRedirectUri",
                                         "authorizationGrantType": "randomAuthorizationGrantType"
                                         }
@@ -116,8 +123,9 @@ public class ClientControllerTest {
 
             @Test
             void shouldCreateClient() throws Exception {
-                CreateClientCommand cmd = new CreateClientCommand("rc", "client1", "secret", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "OPENID", "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
-                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, "OPENID", "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
+                List<String> scopes = List.of("OPENID", "api:read", "api:create");
+                CreateClientCommand cmd = new CreateClientCommand("rc", "client1", "secret", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, scopes, "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
+                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, scopes, "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
                 when(clientService.create(cmd)).thenReturn(response);
 
                 mockMvc.perform(post("/api/clients")
@@ -128,7 +136,11 @@ public class ClientControllerTest {
                                         "clientId": "client1",
                                         "clientSecret": "secret",
                                         "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
-                                        "scope": "OPENID",
+                                        "scopes": [
+                                        "OPENID",
+                                        "api:read",
+                                        "api:create"
+                                        ],
                                         "redirectUri": "http://localhost:8080/authorized",
                                         "authorizationGrantType": "AUTHORIZATION_CODE"
                                         }
@@ -138,7 +150,8 @@ public class ClientControllerTest {
                         .andExpect(jsonPath("$.pid", equalTo("rc")))
                         .andExpect(jsonPath("$.clientId", equalTo("client1")))
                         .andExpect(jsonPath("$.clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC")))
-                        .andExpect(jsonPath("$.scope", equalTo("OPENID")))
+                        .andExpect(jsonPath("$.scopes", hasSize(3)))
+                        .andExpect(jsonPath("$.scopes", containsInAnyOrder("OPENID", "api:read", "api:create")))
                         .andExpect(jsonPath("$.redirectUri", equalTo("http://localhost:8080/authorized")))
                         .andExpect(jsonPath("$.authorizationGrantType", equalTo("AUTHORIZATION_CODE")));
             }

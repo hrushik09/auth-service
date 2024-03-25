@@ -34,7 +34,7 @@ public class ClientService {
         client.setClientId(cmd.clientId());
         client.setClientSecret(passwordEncoder.encode(cmd.clientSecret()));
         client.setClientAuthenticationMethod(cmd.clientAuthenticationMethod());
-        client.setScope(cmd.scope());
+        client.setScope(cmd.scopes().getFirst());
         client.setRedirectUri(cmd.redirectUri());
         client.setAuthorizationGrantType(cmd.authorizationGrantType());
         Client saved = clientRepository.save(client);
