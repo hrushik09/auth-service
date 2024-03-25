@@ -1,6 +1,8 @@
 package io.hrushik09.authservice.clients;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientBuilder {
     private Integer id = 23;
@@ -8,7 +10,7 @@ public class ClientBuilder {
     private String clientId = "someClientId";
     private String clientSecret = "someSecret";
     private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
-    private String scope = "someScope";
+    private List<ClientScopeBuilder> clientScopeBuilderList = new ArrayList<>();
     private String redirectUri = "someRedirectUri";
     private String authorizationGrantType = "someAuthorizationGrantType";
     private Instant createdAt = Instant.parse("2024-01-12T04:03:03Z");
@@ -23,7 +25,7 @@ public class ClientBuilder {
         this.clientId = copy.clientId;
         this.clientSecret = copy.clientSecret;
         this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
-        this.scope = copy.scope;
+        this.clientScopeBuilderList = copy.clientScopeBuilderList;
         this.redirectUri = copy.redirectUri;
         this.authorizationGrantType = copy.authorizationGrantType;
         this.createdAt = copy.createdAt;
@@ -45,7 +47,10 @@ public class ClientBuilder {
         client.setClientId(clientId);
         client.setClientSecret(clientSecret);
         client.setClientAuthenticationMethod(clientAuthenticationMethod);
-        client.setScope(scope);
+        List<ClientScope> clientScopes = clientScopeBuilderList.stream()
+                .map(ClientScopeBuilder::build)
+                .toList();
+        client.setClientScopes(clientScopes);
         client.setRedirectUri(redirectUri);
         client.setAuthorizationGrantType(authorizationGrantType);
         client.setCreatedAt(createdAt);
@@ -78,8 +83,8 @@ public class ClientBuilder {
         return this;
     }
 
-    public ClientBuilder withScope(String scope) {
-        this.scope = scope;
+    public ClientBuilder with(ClientScopeBuilder clientScopeBuilder) {
+        this.clientScopeBuilderList.add(clientScopeBuilder);
         return this;
     }
 

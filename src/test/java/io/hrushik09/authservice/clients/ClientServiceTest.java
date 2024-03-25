@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static io.hrushik09.authservice.clients.ClientBuilder.aClient;
+import static io.hrushik09.authservice.clients.ClientScopeBuilder.aClientScope;
 import static io.hrushik09.authservice.clients.dto.CreateClientCommandBuilder.aCommand;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -69,14 +70,15 @@ class ClientServiceTest {
             String clientId = "client";
             String clientSecret = "secret";
             ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
-            String scope = "OPENID";
             String redirectUri = "http://localhost:8080/authorized";
             String authorizationGrantType = "AUTHORIZATION_CODE";
             ClientBuilder clientBuilder = aClient().withPid(pid)
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
-                    .withScope(scope)
+                    .with(aClientScope().withId(2).withValue("OPENID"))
+                    .with(aClientScope().withId(3).withValue("api:read"))
+                    .with(aClientScope().withId(4).withValue("api:create"))
                     .withRedirectUri(redirectUri)
                     .withAuthorizationGrantType(authorizationGrantType);
             when(clientRepository.save(any(Client.class)))
@@ -86,7 +88,7 @@ class ClientServiceTest {
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
-                    .withScopes(List.of(scope))
+                    .withScopes(List.of("OPENID", "api:read", "api:create"))
                     .withRedirectUri(redirectUri)
                     .withAuthorizationGrantType(authorizationGrantType).build();
             clientService.create(cmd);
@@ -98,7 +100,9 @@ class ClientServiceTest {
             assertThat(captorValue.getClientId()).isEqualTo(clientId);
             assertThat(captorValue.getClientSecret()).isNotNull();
             assertThat(captorValue.getClientAuthenticationMethod()).isEqualTo(clientAuthenticationMethod);
-            assertThat(captorValue.getScope()).isEqualTo(scope);
+            assertThat(captorValue.getClientScopes()).hasSize(3);
+            assertThat(captorValue.getClientScopes()).extracting("value")
+                    .containsExactlyInAnyOrder("OPENID", "api:read", "api:create");
             assertThat(captorValue.getRedirectUri()).isEqualTo(redirectUri);
             assertThat(captorValue.getAuthorizationGrantType()).isEqualTo(authorizationGrantType);
         }
@@ -109,14 +113,15 @@ class ClientServiceTest {
             String clientId = "client";
             String clientSecret = "secret";
             ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
-            String scope = "OPENID";
             String redirectUri = "http://localhost:8080/authorized";
             String authorizationGrantType = "AUTHORIZATION_CODE";
             ClientBuilder clientBuilder = aClient().withPid(pid)
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
-                    .withScope(scope)
+                    .with(aClientScope().withId(2).withValue("OPENID"))
+                    .with(aClientScope().withId(3).withValue("api:read"))
+                    .with(aClientScope().withId(4).withValue("api:create"))
                     .withRedirectUri(redirectUri)
                     .withAuthorizationGrantType(authorizationGrantType);
             when(clientRepository.save(any(Client.class)))
@@ -126,7 +131,7 @@ class ClientServiceTest {
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
-                    .withScopes(List.of(scope))
+                    .withScopes(List.of("OPENID", "api:read", "api:create"))
                     .withRedirectUri(redirectUri)
                     .withAuthorizationGrantType(authorizationGrantType).build();
             CreateClientResponse created = clientService.create(cmd);
@@ -135,7 +140,8 @@ class ClientServiceTest {
             assertThat(created.pid()).isEqualTo(pid);
             assertThat(created.clientId()).isEqualTo(clientId);
             assertThat(created.clientAuthenticationMethod()).isEqualTo(clientAuthenticationMethod);
-            assertThat(created.scopes().getFirst()).isEqualTo(scope);
+            assertThat(created.scopes()).hasSize(3);
+            assertThat(created.scopes()).containsExactlyInAnyOrder("OPENID", "api:read", "api:create");
             assertThat(created.redirectUri()).isEqualTo(redirectUri);
             assertThat(created.authorizationGrantType()).isEqualTo(authorizationGrantType);
         }
