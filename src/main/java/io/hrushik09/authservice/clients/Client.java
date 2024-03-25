@@ -21,6 +21,8 @@ public class Client {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private ClientAuthenticationMethod clientAuthenticationMethod;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "client_id", nullable = false)
     private List<ClientScope> clientScopes = new ArrayList<>();
     @Column(nullable = false)
     private String redirectUri;

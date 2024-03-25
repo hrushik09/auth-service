@@ -1,11 +1,20 @@
 package io.hrushik09.authservice.clients;
 
+import jakarta.persistence.*;
+
 import java.time.Instant;
 
+@Entity
+@Table(name = "clients_scopes")
 public class ClientScope {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false)
     private String value;
+    @Column(nullable = false, insertable = false, updatable = false)
     private Instant createdAt;
+    @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
 
     public ClientScope() {
