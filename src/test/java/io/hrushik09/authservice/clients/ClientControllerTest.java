@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static io.hrushik09.authservice.clients.dto.CreateClientCommandBuilder.aCommand;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -124,7 +125,13 @@ public class ClientControllerTest {
             @Test
             void shouldCreateClient() throws Exception {
                 List<String> scopes = List.of("OPENID", "api:read", "api:create");
-                CreateClientCommand cmd = new CreateClientCommand("rc", "client1", "secret", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, scopes, "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
+                CreateClientCommand cmd = aCommand().withPid("rc")
+                        .withClientId("client1")
+                        .withClientSecret("secret")
+                        .withClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .withScopes(scopes)
+                        .withRedirectUri("http://localhost:8080/authorized")
+                        .withAuthorizationGrantType("AUTHORIZATION_CODE").build();
                 CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, scopes, "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
                 when(clientService.create(cmd)).thenReturn(response);
 
