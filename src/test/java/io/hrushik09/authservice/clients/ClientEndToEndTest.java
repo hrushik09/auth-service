@@ -35,7 +35,7 @@ public class ClientEndToEndTest {
                             "clientId": "client",
                             "clientSecret": "secret",
                             "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
-                            "scope": [
+                            "scopes": [
                             "OPENID",
                             "api:read",
                             "api:create"
