@@ -40,7 +40,10 @@ public class ClientEndToEndTest {
                             "api:read",
                             "api:create"
                             ],
-                            "redirectUri": "http://localhost:8080/authorized",
+                            "redirectUris": [
+                            "http://localhost:8080/authorized",
+                            "http://localhost:8080/api/authorized"
+                            ],
                             "authorizationGrantType": "AUTHORIZATION_CODE"
                             }
                             """)
@@ -53,7 +56,8 @@ public class ClientEndToEndTest {
                     .body("clientId", equalTo("client"))
                     .body("scopes", hasSize(3))
                     .body("scopes", containsInAnyOrder("OPENID", "api:read", "api:create"))
-                    .body("redirectUri", equalTo("http://localhost:8080/authorized"))
+                    .body("redirectUris", hasSize(2))
+                    .body("redirectUris", containsInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
                     .body("clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC"))
                     .body("authorizationGrantType", equalTo("AUTHORIZATION_CODE"));
         }
