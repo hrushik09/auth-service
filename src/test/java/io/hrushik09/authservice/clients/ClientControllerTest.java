@@ -47,7 +47,10 @@ public class ClientControllerTest {
                         "scopes": [
                         "OPENID"
                         ],
-                        "redirectUri": "randomRedirectUri",
+                        "redirectUris": [
+                        "randomRedirectUri1",
+                        "randomRedirectUri2"
+                        ],
                         "authorizationGrantType": "randomAuthorizationGrantType"
                         }
                         """;
@@ -90,7 +93,10 @@ public class ClientControllerTest {
                                         "scopes": [
                                         "OPENID"
                                         ],
-                                        "redirectUri": "randomRedirectUri",
+                                        "redirectUris": [
+                                        "randomRedirectUri1",
+                                        "randomRedirectUri2"
+                                        ],
                                         "authorizationGrantType": "randomAuthorizationGrantType"
                                         }
                                         """))
@@ -114,7 +120,10 @@ public class ClientControllerTest {
                                         "scopes": [
                                         "OPENID"
                                         ],
-                                        "redirectUri": "randomRedirectUri",
+                                        "redirectUris": [
+                                        "randomRedirectUri1",
+                                        "randomRedirectUri2"
+                                        ],
                                         "authorizationGrantType": "randomAuthorizationGrantType"
                                         }
                                         """))
@@ -125,14 +134,15 @@ public class ClientControllerTest {
             @Test
             void shouldCreateClient() throws Exception {
                 List<String> scopes = List.of("OPENID", "api:read", "api:create");
+                List<String> redirectUris = List.of("http://localhost:8080/authorized", "http://localhost:8080/api/authorized");
                 CreateClientCommand cmd = aCommand().withPid("rc")
                         .withClientId("client1")
                         .withClientSecret("secret")
                         .withClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                         .withScopes(scopes)
-                        .withRedirectUri("http://localhost:8080/authorized")
+                        .withRedirectUris(redirectUris)
                         .withAuthorizationGrantType("AUTHORIZATION_CODE").build();
-                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, scopes, "http://localhost:8080/authorized", "AUTHORIZATION_CODE");
+                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, scopes, redirectUris, "AUTHORIZATION_CODE");
                 when(clientService.create(cmd)).thenReturn(response);
 
                 mockMvc.perform(post("/api/clients")
@@ -148,7 +158,10 @@ public class ClientControllerTest {
                                         "api:read",
                                         "api:create"
                                         ],
-                                        "redirectUri": "http://localhost:8080/authorized",
+                                        "redirectUris": [
+                                        "http://localhost:8080/authorized",
+                                        "http://localhost:8080/api/authorized"
+                                        ],
                                         "authorizationGrantType": "AUTHORIZATION_CODE"
                                         }
                                         """))
@@ -159,7 +172,8 @@ public class ClientControllerTest {
                         .andExpect(jsonPath("$.clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC")))
                         .andExpect(jsonPath("$.scopes", hasSize(3)))
                         .andExpect(jsonPath("$.scopes", containsInAnyOrder("OPENID", "api:read", "api:create")))
-                        .andExpect(jsonPath("$.redirectUri", equalTo("http://localhost:8080/authorized")))
+                        .andExpect(jsonPath("$.redirectUris", hasSize(2)))
+                        .andExpect(jsonPath("$.redirectUris", containsInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized")))
                         .andExpect(jsonPath("$.authorizationGrantType", equalTo("AUTHORIZATION_CODE")));
             }
         }

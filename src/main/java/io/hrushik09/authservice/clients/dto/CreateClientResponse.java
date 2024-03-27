@@ -12,13 +12,13 @@ public record CreateClientResponse(
         String clientId,
         ClientAuthenticationMethod clientAuthenticationMethod,
         List<String> scopes,
-        String redirectUri,
+        List<String> redirectUris,
         String authorizationGrantType
 ) {
     public static CreateClientResponse from(Client client) {
         List<String> scopes = client.getClientScopes().stream()
                 .map(ClientScope::getValue)
                 .toList();
-        return new CreateClientResponse(client.getId(), client.getPid(), client.getClientId(), client.getClientAuthenticationMethod(), scopes, client.getRedirectUri(), client.getAuthorizationGrantType());
+        return new CreateClientResponse(client.getId(), client.getPid(), client.getClientId(), client.getClientAuthenticationMethod(), scopes, List.of(client.getRedirectUri()), client.getAuthorizationGrantType());
     }
 }

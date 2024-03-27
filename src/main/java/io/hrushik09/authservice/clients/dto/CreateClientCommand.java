@@ -10,7 +10,7 @@ public record CreateClientCommand(
         String clientSecret,
         ClientAuthenticationMethod clientAuthenticationMethod,
         List<String> scopes,
-        String redirectUri,
+        List<String> redirectUris,
         String authorizationGrantType
 ) {
 }

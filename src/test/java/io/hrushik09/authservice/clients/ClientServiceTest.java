@@ -89,7 +89,7 @@ class ClientServiceTest {
                     .withClientSecret(clientSecret)
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
                     .withScopes(List.of("OPENID", "api:read", "api:create"))
-                    .withRedirectUri(redirectUri)
+                    .withRedirectUris(List.of(redirectUri))
                     .withAuthorizationGrantType(authorizationGrantType).build();
             clientService.create(cmd);
 
@@ -132,7 +132,7 @@ class ClientServiceTest {
                     .withClientSecret(clientSecret)
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
                     .withScopes(List.of("OPENID", "api:read", "api:create"))
-                    .withRedirectUri(redirectUri)
+                    .withRedirectUris(List.of(redirectUri))
                     .withAuthorizationGrantType(authorizationGrantType).build();
             CreateClientResponse created = clientService.create(cmd);
 
@@ -142,7 +142,7 @@ class ClientServiceTest {
             assertThat(created.clientAuthenticationMethod()).isEqualTo(clientAuthenticationMethod);
             assertThat(created.scopes()).hasSize(3);
             assertThat(created.scopes()).containsExactlyInAnyOrder("OPENID", "api:read", "api:create");
-            assertThat(created.redirectUri()).isEqualTo(redirectUri);
+            assertThat(created.redirectUris().getFirst()).isEqualTo(redirectUri);
             assertThat(created.authorizationGrantType()).isEqualTo(authorizationGrantType);
         }
     }
