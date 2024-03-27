@@ -5,7 +5,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,46 +30,25 @@ public class CreateClientRequestTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
-    void pidShouldBeNonEmpty(String id) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void pidShouldBeNonBlank(String id) {
         CreateClientRequest request = aRequest().withPid(id).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "pid should be non-blank");
     }
 
-    @Test
-    void pidShouldBeNonBlank() {
-        CreateClientRequest request = aRequest().withPid("   ").build();
-        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "pid should be non-blank");
-    }
-
     @ParameterizedTest
-    @NullAndEmptySource
-    void clientIdShouldBeNonEmpty(String clientId) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void clientIdShouldBeNonBlank(String clientId) {
         CreateClientRequest request = aRequest().withClientId(clientId).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "clientId should be non-blank");
     }
 
-    @Test
-    void clientIdShouldBeNonBlank() {
-        CreateClientRequest request = aRequest().withClientId("  ").build();
-        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "clientId should be non-blank");
-    }
-
     @ParameterizedTest
-    @NullAndEmptySource
-    void clientSecretShouldBeNonEmpty(String clientSecret) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void clientSecretShouldBeNonBlank(String clientSecret) {
         CreateClientRequest request = aRequest().withClientSecret(clientSecret).build();
-        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "clientSecret should be non-blank");
-    }
-
-    @Test
-    void clientSecretShouldBeNonBlank() {
-        CreateClientRequest request = aRequest().withClientSecret("   ").build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "clientSecret should be non-blank");
     }
@@ -90,19 +69,10 @@ public class CreateClientRequestTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
-    void eachScopeShouldBeNonEmpty(String scope) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void eachScopeShouldBeNonBlank(String scope) {
         List<String> scopes = new ArrayList<>();
         scopes.add(scope);
-        CreateClientRequest request = aRequest().withScopes(scopes).build();
-        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasTwoViolationsWithOneOfThemAs(violations, "each scope should be non-blank");
-    }
-
-    @Test
-    void eachScopeShouldBeNonBlank() {
-        List<String> scopes = new ArrayList<>();
-        scopes.add("    ");
         CreateClientRequest request = aRequest().withScopes(scopes).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasTwoViolationsWithOneOfThemAs(violations, "each scope should be non-blank");
@@ -125,31 +95,17 @@ public class CreateClientRequestTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
-    void redirectUriShouldBeNonEmpty(String redirectUri) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void redirectUriShouldBeNonBlank(String redirectUri) {
         CreateClientRequest request = aRequest().withRedirectUri(redirectUri).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "redirectUri should be non-blank");
     }
 
-    @Test
-    void redirectUriShouldBeNonBlank() {
-        CreateClientRequest request = aRequest().withRedirectUri("   ").build();
-        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "redirectUri should be non-blank");
-    }
-
     @ParameterizedTest
-    @NullAndEmptySource
-    void authorizationGrantTypeShouldBeNonEmpty(String authorizationGrantType) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void authorizationGrantTypeShouldBeNonBlank(String authorizationGrantType) {
         CreateClientRequest request = aRequest().withAuthorizationGrantType(authorizationGrantType).build();
-        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "authorizationGrantType should be non-blank");
-    }
-
-    @Test
-    void authorizationGrantTypeShouldBeNonBlank() {
-        CreateClientRequest request = aRequest().withAuthorizationGrantType("   ").build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "authorizationGrantType should be non-blank");
     }

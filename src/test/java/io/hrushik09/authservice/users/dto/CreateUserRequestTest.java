@@ -5,7 +5,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,31 +24,17 @@ public class CreateUserRequestTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
-    void usernameShouldBeNonEmpty(String username) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void usernameShouldBeNonBlank(String username) {
         CreateUserRequest request = aRequest().withUsername(username).build();
         Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
         hasSingleMessage(violations, "username should be non-blank");
     }
 
-    @Test
-    void usernameShouldBeNonBlank() {
-        CreateUserRequest request = aRequest().withUsername("   ").build();
-        Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "username should be non-blank");
-    }
-
     @ParameterizedTest
-    @NullAndEmptySource
-    void passwordShouldBeNonEmpty(String password) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void passwordShouldBeNonBlank(String password) {
         CreateUserRequest request = aRequest().withPassword(password).build();
-        Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "password should be non-blank");
-    }
-
-    @Test
-    void passwordShouldBeNonBlank() {
-        CreateUserRequest request = aRequest().withPassword("   ").build();
         Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
         hasSingleMessage(violations, "password should be non-blank");
     }
@@ -62,19 +48,10 @@ public class CreateUserRequestTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
-    void eachAuthorityShouldBeNonEmpty(String name) {
+    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
+    void eachAuthorityShouldBeNonBlank(String name) {
         List<String> authorities = new ArrayList<>();
         authorities.add(name);
-        CreateUserRequest request = aRequest().withAuthorities(authorities).build();
-        Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "each authority name should be non-blank");
-    }
-
-    @Test
-    void eachAuthorityShouldBeNonBlank() {
-        List<String> authorities = new ArrayList<>();
-        authorities.add("   ");
         CreateUserRequest request = aRequest().withAuthorities(authorities).build();
         Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
         hasSingleMessage(violations, "each authority name should be non-blank");
