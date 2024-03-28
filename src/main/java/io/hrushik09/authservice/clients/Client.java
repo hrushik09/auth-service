@@ -25,7 +25,7 @@ public class Client {
     @JoinColumn(name = "client_id", nullable = false)
     private List<ClientScope> clientScopes = new ArrayList<>();
     @Column(nullable = false)
-    private String redirectUri;
+    private List<ClientRedirectUri> clientRedirectUris;
     @Column(nullable = false)
     private String authorizationGrantType;
     @Column(nullable = false, insertable = false, updatable = false)
@@ -81,12 +81,12 @@ public class Client {
         this.clientScopes = clientScopes;
     }
 
-    public String getRedirectUri() {
-        return redirectUri;
+    public List<ClientRedirectUri> getClientRedirectUris() {
+        return clientRedirectUris;
     }
 
-    public void setRedirectUri(String redirectUri) {
-        this.redirectUri = redirectUri;
+    public void setClientRedirectUris(List<ClientRedirectUri> clientRedirectUris) {
+        this.clientRedirectUris = clientRedirectUris;
     }
 
     public String getAuthorizationGrantType() {

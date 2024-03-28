@@ -40,7 +40,10 @@ public class ClientService {
                 .map(ClientScope::new)
                 .toList();
         client.setClientScopes(clientScopes);
-        client.setRedirectUri(cmd.redirectUris().getFirst());
+        List<ClientRedirectUri> clientRedirectUris = cmd.redirectUris().stream()
+                .map(ClientRedirectUri::new)
+                .toList();
+        client.setClientRedirectUris(clientRedirectUris);
         client.setAuthorizationGrantType(cmd.authorizationGrantType());
         Client saved = clientRepository.save(client);
         return CreateClientResponse.from(saved);
