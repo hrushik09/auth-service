@@ -18,10 +18,12 @@ public record CreateClientRequest(
         String clientSecret,
         @NotNull(message = "clientAuthenticationMethod should be non-null")
         ClientAuthenticationMethod clientAuthenticationMethod,
+        @NotNull(message = "scopes should be non-null")
         @Size(min = 1, message = "should contain at least one scope")
         @UniqueEntriesConstraint(message = "scopes should be unique")
         @ListContainsGivenStringConstraint(required = "OPENID", message = "scopes should contain OPENID scope")
         List<@NotBlank(message = "each scope should be non-blank") String> scopes,
+        @NotNull(message = "redirectUris should be non-null")
         @Size(min = 1, message = "should contain at least one redirectUri")
         @UniqueEntriesConstraint(message = "redirectUris should be unique")
         List<@NotBlank(message = "redirectUri should be non-blank") String> redirectUris,

@@ -9,6 +9,6 @@ import java.util.List;
 public class UniqueEntriesConstraintValidator implements ConstraintValidator<UniqueEntriesConstraint, List<String>> {
     @Override
     public boolean isValid(List<String> list, ConstraintValidatorContext context) {
-        return list.size() == new HashSet<>(list).size();
+        return list != null && list.size() == new HashSet<>(list).size();
     }
 }
