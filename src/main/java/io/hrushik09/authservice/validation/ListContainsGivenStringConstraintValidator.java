@@ -15,6 +15,6 @@ public class ListContainsGivenStringConstraintValidator implements ConstraintVal
 
     @Override
     public boolean isValid(List<String> list, ConstraintValidatorContext context) {
-        return list.contains(required);
+        return list != null && list.contains(required);
     }
 }

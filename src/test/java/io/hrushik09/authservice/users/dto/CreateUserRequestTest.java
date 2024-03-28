@@ -17,10 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CreateUserRequestTest {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    private static void hasSingleMessage(Set<ConstraintViolation<CreateUserRequest>> violations, String x) {
+    private static void hasSingleMessage(Set<ConstraintViolation<CreateUserRequest>> violations, String message) {
         assertThat(violations).hasSize(1);
         assertThat(violations).extracting("message")
-                .containsExactly(x);
+                .containsExactly(message);
+    }
+
+    private static void hasCountViolationsWithOneOfThemAs(Set<ConstraintViolation<CreateUserRequest>> violations, int count, String message) {
+        assertThat(violations).hasSize(count);
+        assertThat(violations).extracting("message")
+                .contains(message);
     }
 
     @ParameterizedTest
@@ -37,6 +43,13 @@ public class CreateUserRequestTest {
         CreateUserRequest request = aRequest().withPassword(password).build();
         Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
         hasSingleMessage(violations, "password should be non-blank");
+    }
+
+    @Test
+    void authoritiesShouldBeNonNull() {
+        CreateUserRequest request = aRequest().withAuthorities(null).build();
+        Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
+        hasCountViolationsWithOneOfThemAs(violations, 2, "authorities should be non-null");
     }
 
     @Test
