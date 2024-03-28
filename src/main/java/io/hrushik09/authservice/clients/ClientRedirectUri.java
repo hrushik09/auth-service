@@ -1,11 +1,23 @@
 package io.hrushik09.authservice.clients;
 
+import jakarta.persistence.*;
+
 import java.time.Instant;
 
+@Entity
+@Table(
+        name = "clients_redirect_uris",
+        uniqueConstraints = @UniqueConstraint(name = "UK_clients_redirect_uris_value_client_id", columnNames = {"value", "client_id"})
+)
 public class ClientRedirectUri {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false)
     private String value;
+    @Column(nullable = false, insertable = false, updatable = false)
     private Instant createdAt;
+    @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
 
     public ClientRedirectUri() {

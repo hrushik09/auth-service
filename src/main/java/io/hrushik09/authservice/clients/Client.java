@@ -24,7 +24,8 @@ public class Client {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "client_id", nullable = false)
     private List<ClientScope> clientScopes = new ArrayList<>();
-    @Column(nullable = false)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "client_id", nullable = false)
     private List<ClientRedirectUri> clientRedirectUris;
     @Column(nullable = false)
     private String authorizationGrantType;
