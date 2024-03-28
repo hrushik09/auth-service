@@ -10,7 +10,7 @@ public class CreateClientRequestBuilder {
     private String clientSecret = "someClientSecret";
     private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
     private List<String> scopes = List.of("OPENID");
-    private String redirectUri = "someRedirectUri";
+    private List<String> redirectUris = List.of("someRedirectUri");
     private String authorizationGrantType = "someAuthorizationGrantType";
 
     private CreateClientRequestBuilder() {
@@ -22,7 +22,7 @@ public class CreateClientRequestBuilder {
         this.clientSecret = copy.clientSecret;
         this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
         this.scopes = copy.scopes;
-        this.redirectUri = copy.redirectUri;
+        this.redirectUris = copy.redirectUris;
         this.authorizationGrantType = copy.authorizationGrantType;
     }
 
@@ -35,7 +35,7 @@ public class CreateClientRequestBuilder {
     }
 
     public CreateClientRequest build() {
-        return new CreateClientRequest(pid, clientId, clientSecret, clientAuthenticationMethod, scopes, redirectUri, authorizationGrantType);
+        return new CreateClientRequest(pid, clientId, clientSecret, clientAuthenticationMethod, scopes, redirectUris, authorizationGrantType);
     }
 
     public CreateClientRequestBuilder withPid(String pid) {
@@ -63,8 +63,8 @@ public class CreateClientRequestBuilder {
         return this;
     }
 
-    public CreateClientRequestBuilder withRedirectUri(String redirectUri) {
-        this.redirectUri = redirectUri;
+    public CreateClientRequestBuilder withRedirectUris(List<String> redirectUris) {
+        this.redirectUris = redirectUris;
         return this;
     }
 

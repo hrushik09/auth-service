@@ -22,8 +22,9 @@ public record CreateClientRequest(
         @UniqueEntriesConstraint(message = "scopes should be unique")
         @ListContainsGivenStringConstraint(required = "OPENID", message = "scopes should contain OPENID scope")
         List<@NotBlank(message = "each scope should be non-blank") String> scopes,
-        @NotBlank(message = "redirectUri should be non-blank")
-        String redirectUri,
+        @Size(min = 1, message = "should contain at least one redirectUri")
+        @UniqueEntriesConstraint(message = "redirectUris should be unique")
+        List<@NotBlank(message = "redirectUri should be non-blank") String> redirectUris,
         @NotBlank(message = "authorizationGrantType should be non-blank")
         String authorizationGrantType
 ) {

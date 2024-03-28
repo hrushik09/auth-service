@@ -11,7 +11,7 @@ public class ClientBuilder {
     private String clientSecret = "someSecret";
     private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
     private List<ClientScopeBuilder> clientScopeBuilderList = new ArrayList<>();
-    private String redirectUri = "someRedirectUri";
+    private List<ClientRedirectUriBuilder> clientRedirectUriBuilderList = new ArrayList<>();
     private String authorizationGrantType = "someAuthorizationGrantType";
     private Instant createdAt = Instant.parse("2024-01-12T04:03:03Z");
     private Instant updatedAt = Instant.parse("2024-01-12T03:04:04Z");
@@ -26,7 +26,7 @@ public class ClientBuilder {
         this.clientSecret = copy.clientSecret;
         this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
         this.clientScopeBuilderList = copy.clientScopeBuilderList;
-        this.redirectUri = copy.redirectUri;
+        this.clientRedirectUriBuilderList = copy.clientRedirectUriBuilderList;
         this.authorizationGrantType = copy.authorizationGrantType;
         this.createdAt = copy.createdAt;
         this.updatedAt = copy.updatedAt;
@@ -51,7 +51,10 @@ public class ClientBuilder {
                 .map(ClientScopeBuilder::build)
                 .toList();
         client.setClientScopes(clientScopes);
-        client.setRedirectUri(redirectUri);
+        List<ClientRedirectUri> clientRedirectUris = clientRedirectUriBuilderList.stream()
+                .map(ClientRedirectUriBuilder::build)
+                .toList();
+        client.setClientRedirectUris(clientRedirectUris);
         client.setAuthorizationGrantType(authorizationGrantType);
         client.setCreatedAt(createdAt);
         client.setUpdatedAt(updatedAt);
@@ -88,8 +91,8 @@ public class ClientBuilder {
         return this;
     }
 
-    public ClientBuilder withRedirectUri(String redirectUri) {
-        this.redirectUri = redirectUri;
+    public ClientBuilder with(ClientRedirectUriBuilder clientRedirectUriBuilder) {
+        this.clientRedirectUriBuilderList.add(clientRedirectUriBuilder);
         return this;
     }
 

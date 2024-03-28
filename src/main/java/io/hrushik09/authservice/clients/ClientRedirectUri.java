@@ -6,10 +6,10 @@ import java.time.Instant;
 
 @Entity
 @Table(
-        name = "clients_scopes",
-        uniqueConstraints = @UniqueConstraint(name = "UK_clients_scopes_value_client_id", columnNames = {"value", "client_id"})
+        name = "clients_redirect_uris",
+        uniqueConstraints = @UniqueConstraint(name = "UK_clients_redirect_uris_value_client_id", columnNames = {"value", "client_id"})
 )
-public class ClientScope {
+public class ClientRedirectUri {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -20,10 +20,10 @@ public class ClientScope {
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
 
-    public ClientScope() {
+    public ClientRedirectUri() {
     }
 
-    public ClientScope(String value) {
+    public ClientRedirectUri(String value) {
         this.value = value;
     }
 

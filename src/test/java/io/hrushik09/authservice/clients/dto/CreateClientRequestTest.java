@@ -94,12 +94,30 @@ public class CreateClientRequestTest {
         hasOneViolationWithMessage(violations, "scopes should contain OPENID scope");
     }
 
+    @Test
+    void redirectUrisShouldContainAtLeastOneElement() {
+        List<String> redirectUris = List.of();
+        CreateClientRequest request = aRequest().withRedirectUris(redirectUris).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasOneViolationWithMessage(violations, "should contain at least one redirectUri");
+    }
+
     @ParameterizedTest
     @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
-    void redirectUriShouldBeNonBlank(String redirectUri) {
-        CreateClientRequest request = aRequest().withRedirectUri(redirectUri).build();
+    void eachRedirectUriShouldBeNonBlank(String redirectUri) {
+        List<String> redirectUris = new ArrayList<>();
+        redirectUris.add(redirectUri);
+        CreateClientRequest request = aRequest().withRedirectUris(redirectUris).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "redirectUri should be non-blank");
+    }
+
+    @Test
+    void redirectUrisListShouldContainUniqueEntries() {
+        List<String> redirectUris = List.of("firstUnique", "firstDuplicate", "secondUnique", "firstDuplicate");
+        CreateClientRequest request = aRequest().withRedirectUris(redirectUris).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasOneViolationWithMessage(violations, "redirectUris should be unique");
     }
 
     @ParameterizedTest
