@@ -23,8 +23,8 @@ public class CreateClientRequestTest {
                 .containsExactly(message);
     }
 
-    private static void hasTwoViolationsWithOneOfThemAs(Set<ConstraintViolation<CreateClientRequest>> violations, String message) {
-        assertThat(violations).hasSize(2);
+    private static void hasCountViolationsWithOneOfThemAs(Set<ConstraintViolation<CreateClientRequest>> violations, int count, String message) {
+        assertThat(violations).hasSize(count);
         assertThat(violations).extracting("message")
                 .contains(message);
     }
@@ -61,11 +61,18 @@ public class CreateClientRequestTest {
     }
 
     @Test
+    void scopesFieldShouldBeNonNull() {
+        CreateClientRequest request = aRequest().withScopes(null).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasCountViolationsWithOneOfThemAs(violations, 3, "scopes should be non-null");
+    }
+
+    @Test
     void scopesShouldContainAtLeastOneElement() {
         List<String> scopes = List.of();
         CreateClientRequest request = aRequest().withScopes(scopes).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasTwoViolationsWithOneOfThemAs(violations, "should contain at least one scope");
+        hasCountViolationsWithOneOfThemAs(violations, 2, "should contain at least one scope");
     }
 
     @ParameterizedTest
@@ -75,7 +82,7 @@ public class CreateClientRequestTest {
         scopes.add(scope);
         CreateClientRequest request = aRequest().withScopes(scopes).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasTwoViolationsWithOneOfThemAs(violations, "each scope should be non-blank");
+        hasCountViolationsWithOneOfThemAs(violations, 2, "each scope should be non-blank");
     }
 
     @Test
@@ -83,7 +90,7 @@ public class CreateClientRequestTest {
         List<String> scopes = List.of("firstDuplicateScope", "firstUniqueScope", "firstDuplicateScope", "secondDuplicateScope", "secondDuplicateScope");
         CreateClientRequest request = aRequest().withScopes(scopes).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasTwoViolationsWithOneOfThemAs(violations, "scopes should be unique");
+        hasCountViolationsWithOneOfThemAs(violations, 2, "scopes should be unique");
     }
 
     @Test
@@ -92,6 +99,13 @@ public class CreateClientRequestTest {
         CreateClientRequest request = aRequest().withScopes(scopes).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "scopes should contain OPENID scope");
+    }
+
+    @Test
+    void redirectUrisFieldShouldBeNonNull() {
+        CreateClientRequest request = aRequest().withRedirectUris(null).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasCountViolationsWithOneOfThemAs(violations, 2, "redirectUris should be non-null");
     }
 
     @Test
