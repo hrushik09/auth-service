@@ -44,7 +44,10 @@ public class ClientEndToEndTest {
                             "http://localhost:8080/authorized",
                             "http://localhost:8080/api/authorized"
                             ],
-                            "authorizationGrantType": "AUTHORIZATION_CODE"
+                            "authorizationGrantTypes": [
+                            "AUTHORIZATION_CODE",
+                            "REFRESH_TOKEN"
+                            ]
                             }
                             """)
                     .when()
@@ -59,7 +62,8 @@ public class ClientEndToEndTest {
                     .body("redirectUris", hasSize(2))
                     .body("redirectUris", containsInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
                     .body("clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC"))
-                    .body("authorizationGrantType", equalTo("AUTHORIZATION_CODE"));
+                    .body("authorizationGrantTypes", hasSize(2))
+                    .body("authorizationGrantTypes", containsInAnyOrder("AUTHORIZATION_CODE", "REFRESH_TOKEN"));
         }
     }
 }
