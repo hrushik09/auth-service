@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Optional;
 
+import static io.hrushik09.authservice.clients.ClientAuthorizationGrantTypeBuilder.aClientAuthorizationGrantType;
 import static io.hrushik09.authservice.clients.ClientBuilder.aClient;
 import static io.hrushik09.authservice.clients.ClientRedirectUriBuilder.aClientRedirectUri;
 import static io.hrushik09.authservice.clients.ClientScopeBuilder.aClientScope;
@@ -71,7 +72,6 @@ class ClientServiceTest {
             String clientId = "client";
             String clientSecret = "secret";
             AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
-            String authorizationGrantType = "AUTHORIZATION_CODE";
             ClientBuilder clientBuilder = aClient().withPid(pid)
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
@@ -81,7 +81,8 @@ class ClientServiceTest {
                     .with(aClientScope().withId(4).withValue("api:create"))
                     .with(aClientRedirectUri().withId(5).withValue("http://localhost:8080/authorized"))
                     .with(aClientRedirectUri().withId(8).withValue("http://localhost:8080/api/authorized"))
-                    .withAuthorizationGrantType(authorizationGrantType);
+                    .with(aClientAuthorizationGrantType().withId(43).withValue(AuthorizationGrantType.AUTHORIZATION_CODE))
+                    .with(aClientAuthorizationGrantType().withId(87).withValue(AuthorizationGrantType.REFRESH_TOKEN));
             when(clientRepository.save(any(Client.class)))
                     .thenReturn(clientBuilder.build());
 
@@ -91,7 +92,7 @@ class ClientServiceTest {
                     .withAuthenticationMethod(authenticationMethod)
                     .withScopes(List.of("OPENID", "api:read", "api:create"))
                     .withRedirectUris(List.of("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
-                    .withAuthorizationGrantTypes(List.of(AuthorizationGrantType.valueOf(authorizationGrantType))).build();
+                    .withAuthorizationGrantTypes(List.of(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN)).build();
             clientService.create(cmd);
 
             ArgumentCaptor<Client> clientArgumentCaptor = ArgumentCaptor.forClass(Client.class);
@@ -107,7 +108,9 @@ class ClientServiceTest {
             assertThat(captorValue.getClientRedirectUris()).hasSize(2);
             assertThat(captorValue.getClientRedirectUris()).extracting("value")
                     .containsExactlyInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized");
-            assertThat(captorValue.getAuthorizationGrantType()).isEqualTo(authorizationGrantType);
+            assertThat(captorValue.getClientAuthorizationGrantTypes()).hasSize(2);
+            assertThat(captorValue.getClientAuthorizationGrantTypes()).extracting("value")
+                    .containsExactlyInAnyOrder(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN);
         }
 
         @Test
@@ -116,7 +119,6 @@ class ClientServiceTest {
             String clientId = "client";
             String clientSecret = "secret";
             AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
-            String authorizationGrantType = "AUTHORIZATION_CODE";
             ClientBuilder clientBuilder = aClient().withPid(pid)
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
@@ -126,7 +128,8 @@ class ClientServiceTest {
                     .with(aClientScope().withId(4).withValue("api:create"))
                     .with(aClientRedirectUri().withId(5).withValue("http://localhost:8080/authorized"))
                     .with(aClientRedirectUri().withId(8).withValue("http://localhost:8080/api/authorized"))
-                    .withAuthorizationGrantType(authorizationGrantType);
+                    .with(aClientAuthorizationGrantType().withId(43).withValue(AuthorizationGrantType.AUTHORIZATION_CODE))
+                    .with(aClientAuthorizationGrantType().withId(87).withValue(AuthorizationGrantType.REFRESH_TOKEN));
             when(clientRepository.save(any(Client.class)))
                     .thenReturn(clientBuilder.build());
 
@@ -136,7 +139,7 @@ class ClientServiceTest {
                     .withAuthenticationMethod(authenticationMethod)
                     .withScopes(List.of("OPENID", "api:read", "api:create"))
                     .withRedirectUris(List.of("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
-                    .withAuthorizationGrantTypes(List.of(AuthorizationGrantType.valueOf(authorizationGrantType))).build();
+                    .withAuthorizationGrantTypes(List.of(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN)).build();
             CreateClientResponse created = clientService.create(cmd);
 
             assertThat(created.id()).isNotNull();
@@ -148,7 +151,9 @@ class ClientServiceTest {
             assertThat(created.redirectUris()).hasSize(2);
             assertThat(created.redirectUris())
                     .containsExactlyInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized");
-            assertThat(created.authorizationGrantTypes().getFirst().name()).isEqualTo(authorizationGrantType);
+            assertThat(created.authorizationGrantTypes()).hasSize(2);
+            assertThat(created.authorizationGrantTypes())
+                    .containsExactlyInAnyOrder(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN);
         }
     }
 }

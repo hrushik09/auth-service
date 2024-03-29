@@ -12,7 +12,7 @@ public class ClientBuilder {
     private AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
     private List<ClientScopeBuilder> clientScopeBuilderList = new ArrayList<>();
     private List<ClientRedirectUriBuilder> clientRedirectUriBuilderList = new ArrayList<>();
-    private String authorizationGrantType = "someAuthorizationGrantType";
+    private List<ClientAuthorizationGrantTypeBuilder> clientAuthorizationGrantTypeBuilderList = new ArrayList<>();
     private Instant createdAt = Instant.parse("2024-01-12T04:03:03Z");
     private Instant updatedAt = Instant.parse("2024-01-12T03:04:04Z");
 
@@ -27,7 +27,7 @@ public class ClientBuilder {
         this.authenticationMethod = copy.authenticationMethod;
         this.clientScopeBuilderList = copy.clientScopeBuilderList;
         this.clientRedirectUriBuilderList = copy.clientRedirectUriBuilderList;
-        this.authorizationGrantType = copy.authorizationGrantType;
+        this.clientAuthorizationGrantTypeBuilderList = copy.clientAuthorizationGrantTypeBuilderList;
         this.createdAt = copy.createdAt;
         this.updatedAt = copy.updatedAt;
     }
@@ -55,7 +55,10 @@ public class ClientBuilder {
                 .map(ClientRedirectUriBuilder::build)
                 .toList();
         client.setClientRedirectUris(clientRedirectUris);
-        client.setAuthorizationGrantType(authorizationGrantType);
+        List<ClientAuthorizationGrantType> clientAuthorizationGrantTypes = clientAuthorizationGrantTypeBuilderList.stream()
+                .map(ClientAuthorizationGrantTypeBuilder::build)
+                .toList();
+        client.setClientAuthorizationGrantTypes(clientAuthorizationGrantTypes);
         client.setCreatedAt(createdAt);
         client.setUpdatedAt(updatedAt);
         return client;
@@ -96,8 +99,8 @@ public class ClientBuilder {
         return this;
     }
 
-    public ClientBuilder withAuthorizationGrantType(String authorizationGrantType) {
-        this.authorizationGrantType = authorizationGrantType;
+    public ClientBuilder with(ClientAuthorizationGrantTypeBuilder clientAuthorizationGrantTypeBuilder) {
+        this.clientAuthorizationGrantTypeBuilderList.add(clientAuthorizationGrantTypeBuilder);
         return this;
     }
 

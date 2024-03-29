@@ -44,7 +44,10 @@ public class ClientService {
                 .map(ClientRedirectUri::new)
                 .toList();
         client.setClientRedirectUris(clientRedirectUris);
-        client.setAuthorizationGrantType(cmd.authorizationGrantTypes().getFirst().name());
+        List<ClientAuthorizationGrantType> clientAuthorizationGrantTypes = cmd.authorizationGrantTypes().stream()
+                .map(ClientAuthorizationGrantType::new)
+                .toList();
+        client.setClientAuthorizationGrantTypes(clientAuthorizationGrantTypes);
         Client saved = clientRepository.save(client);
         return CreateClientResponse.from(saved);
     }

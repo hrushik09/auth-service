@@ -3,10 +3,10 @@ package io.hrushik09.authservice.clients;
 import java.time.Instant;
 
 public class ClientRedirectUriBuilder {
-    private Integer id = 45;
+    private Integer id = 92;
     private String value = "someRedirectUri";
-    private Instant createdAt = Instant.parse("2024-03-05T01:11:12Z");
-    private Instant updatedAt = Instant.parse("2024-03-06T01:11:12Z");
+    private Instant createdAt = Instant.parse("2024-03-05T01:01:56Z");
+    private Instant updatedAt = Instant.parse("2024-03-06T01:54:34Z");
 
     private ClientRedirectUriBuilder() {
     }

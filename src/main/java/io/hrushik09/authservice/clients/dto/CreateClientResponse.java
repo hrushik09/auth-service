@@ -20,6 +20,9 @@ public record CreateClientResponse(
         List<String> redirectUris = client.getClientRedirectUris().stream()
                 .map(ClientRedirectUri::getValue)
                 .toList();
-        return new CreateClientResponse(client.getId(), client.getPid(), client.getClientId(), client.getAuthenticationMethod(), scopes, redirectUris, List.of(AuthorizationGrantType.valueOf(client.getAuthorizationGrantType())));
+        List<AuthorizationGrantType> authorizationGrantTypes = client.getClientAuthorizationGrantTypes().stream()
+                .map(ClientAuthorizationGrantType::getValue)
+                .toList();
+        return new CreateClientResponse(client.getId(), client.getPid(), client.getClientId(), client.getAuthenticationMethod(), scopes, redirectUris, authorizationGrantTypes);
     }
 }

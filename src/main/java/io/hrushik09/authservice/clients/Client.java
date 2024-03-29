@@ -28,7 +28,7 @@ public class Client {
     @JoinColumn(name = "client_id", nullable = false)
     private List<ClientRedirectUri> clientRedirectUris;
     @Column(nullable = false)
-    private String authorizationGrantType;
+    private List<ClientAuthorizationGrantType> clientAuthorizationGrantTypes;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant createdAt;
     @Column(nullable = false, insertable = false, updatable = false)
@@ -90,12 +90,12 @@ public class Client {
         this.clientRedirectUris = clientRedirectUris;
     }
 
-    public String getAuthorizationGrantType() {
-        return authorizationGrantType;
+    public List<ClientAuthorizationGrantType> getClientAuthorizationGrantTypes() {
+        return clientAuthorizationGrantTypes;
     }
 
-    public void setAuthorizationGrantType(String authorizationGrantType) {
-        this.authorizationGrantType = authorizationGrantType;
+    public void setClientAuthorizationGrantTypes(List<ClientAuthorizationGrantType> clientAuthorizationGrantTypes) {
+        this.clientAuthorizationGrantTypes = clientAuthorizationGrantTypes;
     }
 
     public Instant getCreatedAt() {
