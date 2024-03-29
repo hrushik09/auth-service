@@ -14,17 +14,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat;
-import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,7 +27,6 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.time.Duration;
 import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -96,25 +87,25 @@ public class SecurityConfig {
         };
     }
 
-    @Bean
-    RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
-        RegisteredClient registeredClient = RegisteredClient.withId("rc")
-                .clientId("client")
-                .clientSecret(passwordEncoder.encode("secret"))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .scope(OidcScopes.OPENID)
-                .redirectUri("http://localhost:8080/authorized")
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .tokenSettings(TokenSettings.builder()
-                        .authorizationCodeTimeToLive(Duration.ofMinutes(10))
-                        .accessTokenTimeToLive(Duration.ofMinutes(10))
-                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
-                        .refreshTokenTimeToLive(Duration.ofMinutes(120))
-                        .build())
-                .build();
-        return new InMemoryRegisteredClientRepository(registeredClient);
-    }
+//    @Bean
+//    RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
+//        RegisteredClient registeredClient = RegisteredClient.withId("rc")
+//                .clientId("client")
+//                .clientSecret(passwordEncoder.encode("secret"))
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+//                .scope(OidcScopes.OPENID)
+//                .redirectUri("http://localhost:8080/authorized")
+//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+//                .tokenSettings(TokenSettings.builder()
+//                        .authorizationCodeTimeToLive(Duration.ofMinutes(10))
+//                        .accessTokenTimeToLive(Duration.ofMinutes(10))
+//                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
+//                        .refreshTokenTimeToLive(Duration.ofMinutes(120))
+//                        .build())
+//                .build();
+//        return new InMemoryRegisteredClientRepository(registeredClient);
+//    }
 
     @Bean
     JWKSource<SecurityContext> jwkSource() throws NoSuchAlgorithmException {
