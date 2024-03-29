@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueEntriesConstraintValidator.class)
-public @interface UniqueEntriesConstraint {
+@Constraint(validatedBy = ListContainsUniqueStringsConstraintValidator.class)
+public @interface ListContainsUniqueStringsConstraint {
     String message() default "";
 
     Class<?>[] groups() default {};

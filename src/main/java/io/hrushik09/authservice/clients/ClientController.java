@@ -21,7 +21,7 @@ public class ClientController {
     @PreAuthorize("hasAuthority('clients:create')")
     @ResponseStatus(HttpStatus.CREATED)
     CreateClientResponse create(@RequestBody @Valid CreateClientRequest request) {
-        CreateClientCommand cmd = new CreateClientCommand(request.pid(), request.clientId(), request.clientSecret(), request.clientAuthenticationMethod(), request.scopes(), request.redirectUris(), request.authorizationGrantType());
+        CreateClientCommand cmd = new CreateClientCommand(request.pid(), request.clientId(), request.clientSecret(), request.clientAuthenticationMethod(), request.scopes(), request.redirectUris(), request.authorizationGrantTypes().getFirst().name());
         return clientService.create(cmd);
     }
 }
