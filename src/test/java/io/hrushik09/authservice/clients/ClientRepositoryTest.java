@@ -19,7 +19,7 @@ class ClientRepositoryTest {
     private ClientRepository clientRepository;
 
     @Test
-    void validateFindByPid() {
+    void validateExistsByPid() {
         Client client1 = having.persistedClient(entityManager, "pid1", "doesnt-matter-1");
         having.persistedClient(entityManager, "pid2", "doesnt-matter-2");
         entityManager.flush();
@@ -33,7 +33,7 @@ class ClientRepositoryTest {
     }
 
     @Test
-    void validateFindByClientId() {
+    void validateExistsByClientId() {
         Client client1 = having.persistedClient(entityManager, "doesnt-matter-1", "clientId1");
         having.persistedClient(entityManager, "doesnt-matter-2", "clientId2");
         entityManager.flush();
