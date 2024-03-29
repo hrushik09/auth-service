@@ -44,7 +44,7 @@ public class ClientService {
                 .map(ClientRedirectUri::new)
                 .toList();
         client.setClientRedirectUris(clientRedirectUris);
-        client.setAuthorizationGrantType(cmd.authorizationGrantType());
+        client.setAuthorizationGrantType(cmd.authorizationGrantTypes().getFirst().name());
         Client saved = clientRepository.save(client);
         return CreateClientResponse.from(saved);
     }

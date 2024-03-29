@@ -91,7 +91,7 @@ class ClientServiceTest {
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
                     .withScopes(List.of("OPENID", "api:read", "api:create"))
                     .withRedirectUris(List.of("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
-                    .withAuthorizationGrantType(authorizationGrantType).build();
+                    .withAuthorizationGrantTypes(List.of(AuthorizationGrantType.valueOf(authorizationGrantType))).build();
             clientService.create(cmd);
 
             ArgumentCaptor<Client> clientArgumentCaptor = ArgumentCaptor.forClass(Client.class);
@@ -136,7 +136,7 @@ class ClientServiceTest {
                     .withClientAuthenticationMethod(clientAuthenticationMethod)
                     .withScopes(List.of("OPENID", "api:read", "api:create"))
                     .withRedirectUris(List.of("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
-                    .withAuthorizationGrantType(authorizationGrantType).build();
+                    .withAuthorizationGrantTypes(List.of(AuthorizationGrantType.valueOf(authorizationGrantType))).build();
             CreateClientResponse created = clientService.create(cmd);
 
             assertThat(created.id()).isNotNull();
@@ -148,7 +148,7 @@ class ClientServiceTest {
             assertThat(created.redirectUris()).hasSize(2);
             assertThat(created.redirectUris())
                     .containsExactlyInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized");
-            assertThat(created.authorizationGrantType()).isEqualTo(authorizationGrantType);
+            assertThat(created.authorizationGrantTypes().getFirst().name()).isEqualTo(authorizationGrantType);
         }
     }
 }

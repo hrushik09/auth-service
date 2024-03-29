@@ -1,5 +1,6 @@
 package io.hrushik09.authservice.clients.dto;
 
+import io.hrushik09.authservice.clients.AuthorizationGrantType;
 import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public class CreateClientCommandBuilder {
     private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
     private List<String> scopes = List.of("OPENID");
     private List<String> redirectUris = List.of("someRedirectUri");
-    private String authorizationGrantType = "someAuthorizationGrantType";
+    private List<AuthorizationGrantType> authorizationGrantTypes = List.of(AuthorizationGrantType.AUTHORIZATION_CODE);
 
     private CreateClientCommandBuilder() {
     }
@@ -23,7 +24,7 @@ public class CreateClientCommandBuilder {
         this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
         this.scopes = copy.scopes;
         this.redirectUris = copy.redirectUris;
-        this.authorizationGrantType = copy.authorizationGrantType;
+        this.authorizationGrantTypes = copy.authorizationGrantTypes;
     }
 
     public static CreateClientCommandBuilder aCommand() {
@@ -35,7 +36,7 @@ public class CreateClientCommandBuilder {
     }
 
     public CreateClientCommand build() {
-        return new CreateClientCommand(pid, clientId, clientSecret, clientAuthenticationMethod, scopes, redirectUris, authorizationGrantType);
+        return new CreateClientCommand(pid, clientId, clientSecret, clientAuthenticationMethod, scopes, redirectUris, authorizationGrantTypes);
     }
 
     public CreateClientCommandBuilder withPid(String pid) {
@@ -68,8 +69,8 @@ public class CreateClientCommandBuilder {
         return this;
     }
 
-    public CreateClientCommandBuilder withAuthorizationGrantType(String authorizationGrantType) {
-        this.authorizationGrantType = authorizationGrantType;
+    public CreateClientCommandBuilder withAuthorizationGrantTypes(List<AuthorizationGrantType> authorizationGrantTypes) {
+        this.authorizationGrantTypes = authorizationGrantTypes;
         return this;
     }
 }
