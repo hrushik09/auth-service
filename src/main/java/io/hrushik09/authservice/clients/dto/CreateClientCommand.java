@@ -1,6 +1,7 @@
 package io.hrushik09.authservice.clients.dto;
 
-import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
+import io.hrushik09.authservice.clients.AuthenticationMethod;
+import io.hrushik09.authservice.clients.AuthorizationGrantType;
 
 import java.util.List;
 
@@ -8,9 +9,9 @@ public record CreateClientCommand(
         String pid,
         String clientId,
         String clientSecret,
-        ClientAuthenticationMethod clientAuthenticationMethod,
+        AuthenticationMethod authenticationMethod,
         List<String> scopes,
         List<String> redirectUris,
-        String authorizationGrantType
+        List<AuthorizationGrantType> authorizationGrantTypes
 ) {
 }

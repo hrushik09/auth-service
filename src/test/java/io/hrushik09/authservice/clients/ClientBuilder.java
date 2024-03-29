@@ -9,10 +9,10 @@ public class ClientBuilder {
     private String pid = "somePid";
     private String clientId = "someClientId";
     private String clientSecret = "someSecret";
-    private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
+    private AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
     private List<ClientScopeBuilder> clientScopeBuilderList = new ArrayList<>();
     private List<ClientRedirectUriBuilder> clientRedirectUriBuilderList = new ArrayList<>();
-    private String authorizationGrantType = "someAuthorizationGrantType";
+    private List<ClientAuthorizationGrantTypeBuilder> clientAuthorizationGrantTypeBuilderList = new ArrayList<>();
     private Instant createdAt = Instant.parse("2024-01-12T04:03:03Z");
     private Instant updatedAt = Instant.parse("2024-01-12T03:04:04Z");
 
@@ -24,10 +24,10 @@ public class ClientBuilder {
         this.pid = copy.pid;
         this.clientId = copy.clientId;
         this.clientSecret = copy.clientSecret;
-        this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
+        this.authenticationMethod = copy.authenticationMethod;
         this.clientScopeBuilderList = copy.clientScopeBuilderList;
         this.clientRedirectUriBuilderList = copy.clientRedirectUriBuilderList;
-        this.authorizationGrantType = copy.authorizationGrantType;
+        this.clientAuthorizationGrantTypeBuilderList = copy.clientAuthorizationGrantTypeBuilderList;
         this.createdAt = copy.createdAt;
         this.updatedAt = copy.updatedAt;
     }
@@ -46,7 +46,7 @@ public class ClientBuilder {
         client.setPid(pid);
         client.setClientId(clientId);
         client.setClientSecret(clientSecret);
-        client.setClientAuthenticationMethod(clientAuthenticationMethod);
+        client.setAuthenticationMethod(authenticationMethod);
         List<ClientScope> clientScopes = clientScopeBuilderList.stream()
                 .map(ClientScopeBuilder::build)
                 .toList();
@@ -55,7 +55,10 @@ public class ClientBuilder {
                 .map(ClientRedirectUriBuilder::build)
                 .toList();
         client.setClientRedirectUris(clientRedirectUris);
-        client.setAuthorizationGrantType(authorizationGrantType);
+        List<ClientAuthorizationGrantType> clientAuthorizationGrantTypes = clientAuthorizationGrantTypeBuilderList.stream()
+                .map(ClientAuthorizationGrantTypeBuilder::build)
+                .toList();
+        client.setClientAuthorizationGrantTypes(clientAuthorizationGrantTypes);
         client.setCreatedAt(createdAt);
         client.setUpdatedAt(updatedAt);
         return client;
@@ -81,8 +84,8 @@ public class ClientBuilder {
         return this;
     }
 
-    public ClientBuilder withClientAuthenticationMethod(ClientAuthenticationMethod clientAuthenticationMethod) {
-        this.clientAuthenticationMethod = clientAuthenticationMethod;
+    public ClientBuilder withAuthenticationMethod(AuthenticationMethod authenticationMethod) {
+        this.authenticationMethod = authenticationMethod;
         return this;
     }
 
@@ -96,8 +99,8 @@ public class ClientBuilder {
         return this;
     }
 
-    public ClientBuilder withAuthorizationGrantType(String authorizationGrantType) {
-        this.authorizationGrantType = authorizationGrantType;
+    public ClientBuilder with(ClientAuthorizationGrantTypeBuilder clientAuthorizationGrantTypeBuilder) {
+        this.clientAuthorizationGrantTypeBuilderList.add(clientAuthorizationGrantTypeBuilder);
         return this;
     }
 

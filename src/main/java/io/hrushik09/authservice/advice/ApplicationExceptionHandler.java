@@ -12,16 +12,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleMethodArgumentsNotValid(MethodArgumentNotValidException e) {
+    public Map<String, List<String>> handleMethodArgumentsNotValid(MethodArgumentNotValidException e) {
         return e.getBindingResult().getFieldErrors().stream()
-                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+                .collect(groupingBy(FieldError::getField,
+                        mapping(FieldError::getDefaultMessage, toList())));
     }
 
     @ExceptionHandler({AuthorityAlreadyExists.class, UsernameAlreadyExistsException.class, PidAlreadyExistsException.class, ClientIdAlreadyExistsException.class})

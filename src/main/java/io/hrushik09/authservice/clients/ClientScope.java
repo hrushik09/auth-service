@@ -6,8 +6,8 @@ import java.time.Instant;
 
 @Entity
 @Table(
-        name = "clients_scopes",
-        uniqueConstraints = @UniqueConstraint(name = "UK_clients_scopes_value_client_id", columnNames = {"value", "client_id"})
+        name = "client_scopes",
+        uniqueConstraints = @UniqueConstraint(name = "UK_client_scopes_value_client_id", columnNames = {"value", "client_id"})
 )
 public class ClientScope {
     @Id

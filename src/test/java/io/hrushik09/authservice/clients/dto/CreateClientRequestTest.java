@@ -1,5 +1,6 @@
 package io.hrushik09.authservice.clients.dto;
 
+import io.hrushik09.authservice.clients.AuthorizationGrantType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -7,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -54,10 +55,10 @@ public class CreateClientRequestTest {
     }
 
     @Test
-    void clientAuthenticationMethodShouldBeNonNull() {
-        CreateClientRequest request = aRequest().withClientAuthenticationMethod(null).build();
+    void authenticationMethodShouldBeNonNull() {
+        CreateClientRequest request = aRequest().withAuthenticationMethod(null).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "clientAuthenticationMethod should be non-null");
+        hasOneViolationWithMessage(violations, "authenticationMethod should be non-null");
     }
 
     @Test
@@ -69,8 +70,7 @@ public class CreateClientRequestTest {
 
     @Test
     void scopesShouldContainAtLeastOneElement() {
-        List<String> scopes = List.of();
-        CreateClientRequest request = aRequest().withScopes(scopes).build();
+        CreateClientRequest request = aRequest().withScopes(List.of()).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasCountViolationsWithOneOfThemAs(violations, 2, "should contain at least one scope");
     }
@@ -78,9 +78,7 @@ public class CreateClientRequestTest {
     @ParameterizedTest
     @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
     void eachScopeShouldBeNonBlank(String scope) {
-        List<String> scopes = new ArrayList<>();
-        scopes.add(scope);
-        CreateClientRequest request = aRequest().withScopes(scopes).build();
+        CreateClientRequest request = aRequest().withScopes(Collections.singletonList(scope)).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasCountViolationsWithOneOfThemAs(violations, 2, "each scope should be non-blank");
     }
@@ -110,8 +108,7 @@ public class CreateClientRequestTest {
 
     @Test
     void redirectUrisShouldContainAtLeastOneElement() {
-        List<String> redirectUris = List.of();
-        CreateClientRequest request = aRequest().withRedirectUris(redirectUris).build();
+        CreateClientRequest request = aRequest().withRedirectUris(List.of()).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "should contain at least one redirectUri");
     }
@@ -119,9 +116,7 @@ public class CreateClientRequestTest {
     @ParameterizedTest
     @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
     void eachRedirectUriShouldBeNonBlank(String redirectUri) {
-        List<String> redirectUris = new ArrayList<>();
-        redirectUris.add(redirectUri);
-        CreateClientRequest request = aRequest().withRedirectUris(redirectUris).build();
+        CreateClientRequest request = aRequest().withRedirectUris(Collections.singletonList(redirectUri)).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "redirectUri should be non-blank");
     }
@@ -134,11 +129,32 @@ public class CreateClientRequestTest {
         hasOneViolationWithMessage(violations, "redirectUris should be unique");
     }
 
-    @ParameterizedTest
-    @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
-    void authorizationGrantTypeShouldBeNonBlank(String authorizationGrantType) {
-        CreateClientRequest request = aRequest().withAuthorizationGrantType(authorizationGrantType).build();
+    @Test
+    void authorizationGrantTypesShouldBeNonNull() {
+        CreateClientRequest request = aRequest().withAuthorizationGrantTypes(null).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "authorizationGrantType should be non-blank");
+        hasCountViolationsWithOneOfThemAs(violations, 2, "authorizationGrantTypes should be non-null");
+    }
+
+    @Test
+    void authorizationGrantTypesShouldContainAtLeastOneElement() {
+        CreateClientRequest request = aRequest().withAuthorizationGrantTypes(List.of()).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasOneViolationWithMessage(violations, "authorizationGrantTypes should contain at least one element");
+    }
+
+    @Test
+    void eachAuthorizationGrantTypeShouldBeNonNull() {
+        CreateClientRequest request = aRequest().withAuthorizationGrantTypes(Collections.singletonList(null)).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasOneViolationWithMessage(violations, "authorizationGrantType should be non-null");
+    }
+
+    @Test
+    void authorizationGrantTypesShouldContainUniqueEntries() {
+        List<AuthorizationGrantType> authorizationGrantTypes = List.of(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.AUTHORIZATION_CODE);
+        CreateClientRequest request = aRequest().withAuthorizationGrantTypes(authorizationGrantTypes).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasOneViolationWithMessage(violations, "authorizationGrantTypes should be unique");
     }
 }

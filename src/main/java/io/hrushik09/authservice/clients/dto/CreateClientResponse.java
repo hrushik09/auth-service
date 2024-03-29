@@ -1,9 +1,6 @@
 package io.hrushik09.authservice.clients.dto;
 
-import io.hrushik09.authservice.clients.Client;
-import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
-import io.hrushik09.authservice.clients.ClientRedirectUri;
-import io.hrushik09.authservice.clients.ClientScope;
+import io.hrushik09.authservice.clients.*;
 
 import java.util.List;
 
@@ -11,10 +8,10 @@ public record CreateClientResponse(
         Integer id,
         String pid,
         String clientId,
-        ClientAuthenticationMethod clientAuthenticationMethod,
+        AuthenticationMethod authenticationMethod,
         List<String> scopes,
         List<String> redirectUris,
-        String authorizationGrantType
+        List<AuthorizationGrantType> authorizationGrantTypes
 ) {
     public static CreateClientResponse from(Client client) {
         List<String> scopes = client.getClientScopes().stream()
@@ -23,6 +20,9 @@ public record CreateClientResponse(
         List<String> redirectUris = client.getClientRedirectUris().stream()
                 .map(ClientRedirectUri::getValue)
                 .toList();
-        return new CreateClientResponse(client.getId(), client.getPid(), client.getClientId(), client.getClientAuthenticationMethod(), scopes, redirectUris, client.getAuthorizationGrantType());
+        List<AuthorizationGrantType> authorizationGrantTypes = client.getClientAuthorizationGrantTypes().stream()
+                .map(ClientAuthorizationGrantType::getValue)
+                .toList();
+        return new CreateClientResponse(client.getId(), client.getPid(), client.getClientId(), client.getAuthenticationMethod(), scopes, redirectUris, authorizationGrantTypes);
     }
 }

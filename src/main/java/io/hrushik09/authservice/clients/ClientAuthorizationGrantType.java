@@ -6,24 +6,25 @@ import java.time.Instant;
 
 @Entity
 @Table(
-        name = "client_redirect_uris",
-        uniqueConstraints = @UniqueConstraint(name = "UK_client_redirect_uris_value_client_id", columnNames = {"value", "client_id"})
+        name = "client_authorization_grant_types",
+        uniqueConstraints = @UniqueConstraint(name = "UK_client_authorization_grant_types_value_client_id", columnNames = {"value", "client_id"})
 )
-public class ClientRedirectUri {
+public class ClientAuthorizationGrantType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
-    private String value;
+    @Enumerated(value = EnumType.STRING)
+    private AuthorizationGrantType value;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant createdAt;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant updatedAt;
 
-    public ClientRedirectUri() {
+    public ClientAuthorizationGrantType() {
     }
 
-    public ClientRedirectUri(String value) {
+    public ClientAuthorizationGrantType(AuthorizationGrantType value) {
         this.value = value;
     }
 
@@ -35,11 +36,11 @@ public class ClientRedirectUri {
         this.id = id;
     }
 
-    public String getValue() {
+    public AuthorizationGrantType getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(AuthorizationGrantType value) {
         this.value = value;
     }
 

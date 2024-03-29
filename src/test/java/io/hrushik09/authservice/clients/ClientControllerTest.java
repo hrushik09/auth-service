@@ -43,7 +43,7 @@ public class ClientControllerTest {
                         "pid": "randomPid",
                         "clientId": "randomClientId",
                         "clientSecret": "randomSecret",
-                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                        "authenticationMethod": "CLIENT_SECRET_BASIC",
                         "scopes": [
                         "OPENID"
                         ],
@@ -51,7 +51,10 @@ public class ClientControllerTest {
                         "randomRedirectUri1",
                         "randomRedirectUri2"
                         ],
-                        "authorizationGrantType": "randomAuthorizationGrantType"
+                        "authorizationGrantTypes": [
+                        "AUTHORIZATION_CODE",
+                        "REFRESH_TOKEN"
+                        ]
                         }
                         """;
             }
@@ -89,7 +92,7 @@ public class ClientControllerTest {
                                         "pid": "duplicatePid",
                                         "clientId": "randomClientId",
                                         "clientSecret": "randomSecret",
-                                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                                        "authenticationMethod": "CLIENT_SECRET_BASIC",
                                         "scopes": [
                                         "OPENID"
                                         ],
@@ -97,7 +100,10 @@ public class ClientControllerTest {
                                         "randomRedirectUri1",
                                         "randomRedirectUri2"
                                         ],
-                                        "authorizationGrantType": "randomAuthorizationGrantType"
+                                        "authorizationGrantTypes": [
+                                        "AUTHORIZATION_CODE",
+                                        "REFRESH_TOKEN"
+                                        ]
                                         }
                                         """))
                         .andExpect(status().isBadRequest())
@@ -116,7 +122,7 @@ public class ClientControllerTest {
                                         "pid": "randomPid",
                                         "clientId": "duplicateClientId",
                                         "clientSecret": "randomSecret",
-                                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                                        "authenticationMethod": "CLIENT_SECRET_BASIC",
                                         "scopes": [
                                         "OPENID"
                                         ],
@@ -124,7 +130,10 @@ public class ClientControllerTest {
                                         "randomRedirectUri1",
                                         "randomRedirectUri2"
                                         ],
-                                        "authorizationGrantType": "randomAuthorizationGrantType"
+                                        "authorizationGrantTypes": [
+                                        "AUTHORIZATION_CODE",
+                                        "REFRESH_TOKEN"
+                                        ]
                                         }
                                         """))
                         .andExpect(status().isBadRequest())
@@ -135,14 +144,16 @@ public class ClientControllerTest {
             void shouldCreateClient() throws Exception {
                 List<String> scopes = List.of("OPENID", "api:read", "api:create");
                 List<String> redirectUris = List.of("http://localhost:8080/authorized", "http://localhost:8080/api/authorized");
+                List<AuthorizationGrantType> authorizationGrantTypes = List.of(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN);
                 CreateClientCommand cmd = aCommand().withPid("rc")
                         .withClientId("client1")
                         .withClientSecret("secret")
-                        .withClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .withAuthenticationMethod(AuthenticationMethod.CLIENT_SECRET_BASIC)
                         .withScopes(scopes)
                         .withRedirectUris(redirectUris)
-                        .withAuthorizationGrantType("AUTHORIZATION_CODE").build();
-                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, scopes, redirectUris, "AUTHORIZATION_CODE");
+                        .withAuthorizationGrantTypes(authorizationGrantTypes)
+                        .build();
+                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", AuthenticationMethod.CLIENT_SECRET_BASIC, scopes, redirectUris, authorizationGrantTypes);
                 when(clientService.create(cmd)).thenReturn(response);
 
                 mockMvc.perform(post("/api/clients")
@@ -152,7 +163,7 @@ public class ClientControllerTest {
                                         "pid": "rc",
                                         "clientId": "client1",
                                         "clientSecret": "secret",
-                                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                                        "authenticationMethod": "CLIENT_SECRET_BASIC",
                                         "scopes": [
                                         "OPENID",
                                         "api:read",
@@ -162,19 +173,23 @@ public class ClientControllerTest {
                                         "http://localhost:8080/authorized",
                                         "http://localhost:8080/api/authorized"
                                         ],
-                                        "authorizationGrantType": "AUTHORIZATION_CODE"
+                                        "authorizationGrantTypes": [
+                                        "AUTHORIZATION_CODE",
+                                        "REFRESH_TOKEN"
+                                        ]
                                         }
                                         """))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.id", notNullValue()))
                         .andExpect(jsonPath("$.pid", equalTo("rc")))
                         .andExpect(jsonPath("$.clientId", equalTo("client1")))
-                        .andExpect(jsonPath("$.clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC")))
+                        .andExpect(jsonPath("$.authenticationMethod", equalTo("CLIENT_SECRET_BASIC")))
                         .andExpect(jsonPath("$.scopes", hasSize(3)))
                         .andExpect(jsonPath("$.scopes", containsInAnyOrder("OPENID", "api:read", "api:create")))
                         .andExpect(jsonPath("$.redirectUris", hasSize(2)))
                         .andExpect(jsonPath("$.redirectUris", containsInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized")))
-                        .andExpect(jsonPath("$.authorizationGrantType", equalTo("AUTHORIZATION_CODE")));
+                        .andExpect(jsonPath("$.authorizationGrantTypes", hasSize(2)))
+                        .andExpect(jsonPath("$.authorizationGrantTypes", containsInAnyOrder("AUTHORIZATION_CODE", "REFRESH_TOKEN")));
             }
         }
     }
