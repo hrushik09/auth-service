@@ -204,4 +204,53 @@ class ClientServiceTest {
                     .containsExactlyInAnyOrder(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN);
         }
     }
+
+    @Nested
+    class FindByClientId {
+        @Test
+        void shouldThrowWhenFindingNonExistingClient() {
+            String nonExistingClientId = "nonExistingClientId";
+            when(clientRepository.findByClientId(nonExistingClientId)).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> clientService.findByClientId(nonExistingClientId))
+                    .isInstanceOf(ClientDoesNotExist.class)
+                    .hasMessage("Client with clientId " + nonExistingClientId + " does not exist");
+        }
+
+        @Test
+        void shouldFindClientByClientId() {
+            String pid = "rc";
+            String clientId = "client";
+            String clientSecret = "secret";
+            AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
+            ClientBuilder clientBuilder = aClient().withPid(pid)
+                    .withClientId(clientId)
+                    .withClientSecret(clientSecret)
+                    .withAuthenticationMethod(authenticationMethod)
+                    .with(aClientScope().withId(2).withValue("OPENID"))
+                    .with(aClientScope().withId(3).withValue("api:read"))
+                    .with(aClientScope().withId(4).withValue("api:create"))
+                    .with(aClientRedirectUri().withId(5).withValue("http://localhost:8080/authorized"))
+                    .with(aClientRedirectUri().withId(8).withValue("http://localhost:8080/api/authorized"))
+                    .with(aClientAuthorizationGrantType().withId(43).withValue(AuthorizationGrantType.AUTHORIZATION_CODE))
+                    .with(aClientAuthorizationGrantType().withId(87).withValue(AuthorizationGrantType.REFRESH_TOKEN));
+            when(clientRepository.findByClientId(clientId)).thenReturn(Optional.of(clientBuilder.build()));
+
+            Client fetched = clientService.findByClientId(clientId);
+
+            assertThat(fetched.getId()).isNotNull();
+            assertThat(fetched.getPid()).isEqualTo(pid);
+            assertThat(fetched.getClientId()).isEqualTo(clientId);
+            assertThat(fetched.getAuthenticationMethod()).isEqualTo(authenticationMethod);
+            assertThat(fetched.getClientScopes()).hasSize(3);
+            assertThat(fetched.getClientScopes()).extracting("value")
+                    .containsExactlyInAnyOrder("OPENID", "api:read", "api:create");
+            assertThat(fetched.getClientRedirectUris()).hasSize(2);
+            assertThat(fetched.getClientRedirectUris()).extracting("value")
+                    .containsExactlyInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized");
+            assertThat(fetched.getClientAuthorizationGrantTypes()).hasSize(2);
+            assertThat(fetched.getClientAuthorizationGrantTypes()).extracting("value")
+                    .containsExactlyInAnyOrder(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN);
+        }
+    }
 }

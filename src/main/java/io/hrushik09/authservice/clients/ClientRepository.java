@@ -10,4 +10,6 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
     boolean existsByClientId(String clientId);
 
     Optional<Client> findByPid(String pid);
+
+    Optional<Client> findByClientId(String clientId);
 }

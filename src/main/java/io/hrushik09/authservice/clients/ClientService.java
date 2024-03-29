@@ -55,4 +55,9 @@ public class ClientService {
         return clientRepository.findByPid(pid)
                 .orElseThrow(() -> new ClientDoesNotExist("Client with pid " + pid + " does not exist"));
     }
+
+    public Client findByClientId(String clientId) {
+        return clientRepository.findByClientId(clientId)
+                .orElseThrow(() -> new ClientDoesNotExist("Client with clientId " + clientId + " does not exist"));
+    }
 }
