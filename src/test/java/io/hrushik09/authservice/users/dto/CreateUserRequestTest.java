@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -54,18 +54,15 @@ public class CreateUserRequestTest {
 
     @Test
     void authoritiesShouldContainAtLeastOneElement() {
-        List<String> authorities = List.of();
-        CreateUserRequest request = aRequest().withAuthorities(authorities).build();
+        CreateUserRequest request = aRequest().withAuthorities(List.of()).build();
         Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
-        hasSingleMessage(violations, "should contain at least one authority");
+        hasSingleMessage(violations, "authorities should contain at least one element");
     }
 
     @ParameterizedTest
     @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
     void eachAuthorityShouldBeNonBlank(String name) {
-        List<String> authorities = new ArrayList<>();
-        authorities.add(name);
-        CreateUserRequest request = aRequest().withAuthorities(authorities).build();
+        CreateUserRequest request = aRequest().withAuthorities(Collections.singletonList(name)).build();
         Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(request);
         hasSingleMessage(violations, "each authority name should be non-blank");
     }

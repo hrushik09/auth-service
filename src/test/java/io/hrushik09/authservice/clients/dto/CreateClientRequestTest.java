@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -71,8 +70,7 @@ public class CreateClientRequestTest {
 
     @Test
     void scopesShouldContainAtLeastOneElement() {
-        List<String> scopes = List.of();
-        CreateClientRequest request = aRequest().withScopes(scopes).build();
+        CreateClientRequest request = aRequest().withScopes(List.of()).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasCountViolationsWithOneOfThemAs(violations, 2, "should contain at least one scope");
     }
@@ -80,9 +78,7 @@ public class CreateClientRequestTest {
     @ParameterizedTest
     @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
     void eachScopeShouldBeNonBlank(String scope) {
-        List<String> scopes = new ArrayList<>();
-        scopes.add(scope);
-        CreateClientRequest request = aRequest().withScopes(scopes).build();
+        CreateClientRequest request = aRequest().withScopes(Collections.singletonList(scope)).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasCountViolationsWithOneOfThemAs(violations, 2, "each scope should be non-blank");
     }
@@ -112,8 +108,7 @@ public class CreateClientRequestTest {
 
     @Test
     void redirectUrisShouldContainAtLeastOneElement() {
-        List<String> redirectUris = List.of();
-        CreateClientRequest request = aRequest().withRedirectUris(redirectUris).build();
+        CreateClientRequest request = aRequest().withRedirectUris(List.of()).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "should contain at least one redirectUri");
     }
@@ -121,9 +116,7 @@ public class CreateClientRequestTest {
     @ParameterizedTest
     @MethodSource("io.hrushik09.authservice.setup.ParameterizedTestParams#blankStrings")
     void eachRedirectUriShouldBeNonBlank(String redirectUri) {
-        List<String> redirectUris = new ArrayList<>();
-        redirectUris.add(redirectUri);
-        CreateClientRequest request = aRequest().withRedirectUris(redirectUris).build();
+        CreateClientRequest request = aRequest().withRedirectUris(Collections.singletonList(redirectUri)).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "redirectUri should be non-blank");
     }
@@ -152,8 +145,7 @@ public class CreateClientRequestTest {
 
     @Test
     void eachAuthorizationGrantTypeShouldBeNonNull() {
-        List<AuthorizationGrantType> authorizationGrantTypes = Collections.singletonList(null);
-        CreateClientRequest request = aRequest().withAuthorizationGrantTypes(authorizationGrantTypes).build();
+        CreateClientRequest request = aRequest().withAuthorizationGrantTypes(Collections.singletonList(null)).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "authorizationGrantType should be non-null");
     }

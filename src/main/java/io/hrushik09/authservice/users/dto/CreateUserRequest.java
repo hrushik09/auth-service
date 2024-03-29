@@ -13,7 +13,7 @@ public record CreateUserRequest(
         @NotBlank(message = "password should be non-blank")
         String password,
         @NotNull(message = "authorities should be non-null")
-        @Size(min = 1, message = "should contain at least one authority")
+        @Size(min = 1, message = "authorities should contain at least one element")
         @ListContainsUniqueStringsConstraint(message = "authorities should be unique")
         List<@NotBlank(message = "each authority name should be non-blank") String> authorities
 ) {
