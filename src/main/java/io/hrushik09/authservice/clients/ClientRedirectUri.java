@@ -6,8 +6,8 @@ import java.time.Instant;
 
 @Entity
 @Table(
-        name = "clients_redirect_uris",
-        uniqueConstraints = @UniqueConstraint(name = "UK_clients_redirect_uris_value_client_id", columnNames = {"value", "client_id"})
+        name = "client_redirect_uris",
+        uniqueConstraints = @UniqueConstraint(name = "UK_client_redirect_uris_value_client_id", columnNames = {"value", "client_id"})
 )
 public class ClientRedirectUri {
     @Id
