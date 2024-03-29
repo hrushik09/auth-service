@@ -29,11 +29,9 @@ class ClientRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        Optional<Client> optionalClient = clientRepository.existsByPid(client1.getPid());
+        boolean exists = clientRepository.existsByPid(client1.getPid());
 
-        assertThat(optionalClient).isPresent();
-        Client fetched = optionalClient.get();
-        assertThat(fetched.getPid()).isEqualTo(client1.getPid());
+        assertThat(exists).isTrue();
     }
 
     @Test
@@ -43,11 +41,9 @@ class ClientRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        Optional<Client> optionalClient = clientRepository.existsByClientId(client1.getClientId());
+        boolean exists = clientRepository.existsByClientId(client1.getClientId());
 
-        assertThat(optionalClient).isPresent();
-        Client fetched = optionalClient.get();
-        assertThat(fetched.getClientId()).isEqualTo(client1.getClientId());
+        assertThat(exists).isTrue();
     }
 
     @Test

@@ -24,14 +24,12 @@ public class ClientService {
 
     @Transactional
     public CreateClientResponse create(CreateClientCommand cmd) {
-        clientRepository.existsByPid(cmd.pid())
-                .ifPresent(client -> {
-                    throw new PidAlreadyExistsException(cmd.pid());
-                });
-        clientRepository.existsByClientId(cmd.clientId())
-                .ifPresent(client -> {
-                    throw new ClientIdAlreadyExistsException(cmd.clientId());
-                });
+        if (clientRepository.existsByPid(cmd.pid())) {
+            throw new PidAlreadyExistsException(cmd.pid());
+        }
+        if (clientRepository.existsByClientId(cmd.clientId())) {
+            throw new ClientIdAlreadyExistsException(cmd.clientId());
+        }
         Client client = new Client();
         client.setPid(cmd.pid());
         client.setClientId(cmd.clientId());

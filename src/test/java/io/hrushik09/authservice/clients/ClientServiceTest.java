@@ -46,8 +46,7 @@ class ClientServiceTest {
         @Test
         void shouldThrowWhenPidAlreadyExists() {
             String duplicatePid = "duplicatePid";
-            when(clientRepository.existsByPid(duplicatePid))
-                    .thenReturn(Optional.of(aClient().withPid(duplicatePid).build()));
+            when(clientRepository.existsByPid(duplicatePid)).thenReturn(true);
 
             CreateClientCommand cmd = aCommand().withPid(duplicatePid).build();
             assertThatThrownBy(() -> clientService.create(cmd))
@@ -58,8 +57,7 @@ class ClientServiceTest {
         @Test
         void shouldThrowWhenClientIdAlreadyExists() {
             String duplicateClientId = "duplicateClientId";
-            when(clientRepository.existsByClientId(duplicateClientId))
-                    .thenReturn(Optional.of(aClient().withClientId(duplicateClientId).build()));
+            when(clientRepository.existsByClientId(duplicateClientId)).thenReturn(true);
 
             CreateClientCommand cmd = aCommand().withClientId(duplicateClientId).build();
             assertThatThrownBy(() -> clientService.create(cmd))
