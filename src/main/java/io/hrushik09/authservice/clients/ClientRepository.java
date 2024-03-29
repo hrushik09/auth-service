@@ -11,4 +11,6 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 
     @Query("SELECT c FROM Client c WHERE c.clientId = :clientId")
     Optional<Client> existsByClientId(String clientId);
+
+    Optional<Client> findByPid(String pid);
 }
