@@ -70,12 +70,12 @@ class ClientServiceTest {
             String pid = "rc";
             String clientId = "client";
             String clientSecret = "secret";
-            ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
+            AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
             String authorizationGrantType = "AUTHORIZATION_CODE";
             ClientBuilder clientBuilder = aClient().withPid(pid)
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
-                    .withClientAuthenticationMethod(clientAuthenticationMethod)
+                    .withAuthenticationMethod(authenticationMethod)
                     .with(aClientScope().withId(2).withValue("OPENID"))
                     .with(aClientScope().withId(3).withValue("api:read"))
                     .with(aClientScope().withId(4).withValue("api:create"))
@@ -88,7 +88,7 @@ class ClientServiceTest {
             CreateClientCommand cmd = aCommand().withPid(pid)
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
-                    .withClientAuthenticationMethod(clientAuthenticationMethod)
+                    .withAuthenticationMethod(authenticationMethod)
                     .withScopes(List.of("OPENID", "api:read", "api:create"))
                     .withRedirectUris(List.of("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
                     .withAuthorizationGrantTypes(List.of(AuthorizationGrantType.valueOf(authorizationGrantType))).build();
@@ -100,7 +100,7 @@ class ClientServiceTest {
             assertThat(captorValue.getPid()).isEqualTo(pid);
             assertThat(captorValue.getClientId()).isEqualTo(clientId);
             assertThat(captorValue.getClientSecret()).isNotNull();
-            assertThat(captorValue.getClientAuthenticationMethod()).isEqualTo(clientAuthenticationMethod);
+            assertThat(captorValue.getAuthenticationMethod()).isEqualTo(authenticationMethod);
             assertThat(captorValue.getClientScopes()).hasSize(3);
             assertThat(captorValue.getClientScopes()).extracting("value")
                     .containsExactlyInAnyOrder("OPENID", "api:read", "api:create");
@@ -115,12 +115,12 @@ class ClientServiceTest {
             String pid = "rc";
             String clientId = "client";
             String clientSecret = "secret";
-            ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
+            AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
             String authorizationGrantType = "AUTHORIZATION_CODE";
             ClientBuilder clientBuilder = aClient().withPid(pid)
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
-                    .withClientAuthenticationMethod(clientAuthenticationMethod)
+                    .withAuthenticationMethod(authenticationMethod)
                     .with(aClientScope().withId(2).withValue("OPENID"))
                     .with(aClientScope().withId(3).withValue("api:read"))
                     .with(aClientScope().withId(4).withValue("api:create"))
@@ -133,7 +133,7 @@ class ClientServiceTest {
             CreateClientCommand cmd = aCommand().withPid(pid)
                     .withClientId(clientId)
                     .withClientSecret(clientSecret)
-                    .withClientAuthenticationMethod(clientAuthenticationMethod)
+                    .withAuthenticationMethod(authenticationMethod)
                     .withScopes(List.of("OPENID", "api:read", "api:create"))
                     .withRedirectUris(List.of("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
                     .withAuthorizationGrantTypes(List.of(AuthorizationGrantType.valueOf(authorizationGrantType))).build();
@@ -142,7 +142,7 @@ class ClientServiceTest {
             assertThat(created.id()).isNotNull();
             assertThat(created.pid()).isEqualTo(pid);
             assertThat(created.clientId()).isEqualTo(clientId);
-            assertThat(created.clientAuthenticationMethod()).isEqualTo(clientAuthenticationMethod);
+            assertThat(created.authenticationMethod()).isEqualTo(authenticationMethod);
             assertThat(created.scopes()).hasSize(3);
             assertThat(created.scopes()).containsExactlyInAnyOrder("OPENID", "api:read", "api:create");
             assertThat(created.redirectUris()).hasSize(2);

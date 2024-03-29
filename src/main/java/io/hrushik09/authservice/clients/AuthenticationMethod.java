@@ -1,5 +1,5 @@
 package io.hrushik09.authservice.clients;
 
-public enum ClientAuthenticationMethod {
+public enum AuthenticationMethod {
     CLIENT_SECRET_BASIC
 }

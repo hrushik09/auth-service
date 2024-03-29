@@ -1,7 +1,7 @@
 package io.hrushik09.authservice.clients.dto;
 
+import io.hrushik09.authservice.clients.AuthenticationMethod;
 import io.hrushik09.authservice.clients.AuthorizationGrantType;
-import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public class CreateClientCommandBuilder {
     private String pid = "somePid";
     private String clientId = "someClientId";
     private String clientSecret = "someClientSecret";
-    private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
+    private AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
     private List<String> scopes = List.of("OPENID");
     private List<String> redirectUris = List.of("someRedirectUri");
     private List<AuthorizationGrantType> authorizationGrantTypes = List.of(AuthorizationGrantType.AUTHORIZATION_CODE);
@@ -21,7 +21,7 @@ public class CreateClientCommandBuilder {
         this.pid = copy.pid;
         this.clientId = copy.clientId;
         this.clientSecret = copy.clientSecret;
-        this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
+        this.authenticationMethod = copy.authenticationMethod;
         this.scopes = copy.scopes;
         this.redirectUris = copy.redirectUris;
         this.authorizationGrantTypes = copy.authorizationGrantTypes;
@@ -36,7 +36,7 @@ public class CreateClientCommandBuilder {
     }
 
     public CreateClientCommand build() {
-        return new CreateClientCommand(pid, clientId, clientSecret, clientAuthenticationMethod, scopes, redirectUris, authorizationGrantTypes);
+        return new CreateClientCommand(pid, clientId, clientSecret, authenticationMethod, scopes, redirectUris, authorizationGrantTypes);
     }
 
     public CreateClientCommandBuilder withPid(String pid) {
@@ -54,8 +54,8 @@ public class CreateClientCommandBuilder {
         return this;
     }
 
-    public CreateClientCommandBuilder withClientAuthenticationMethod(ClientAuthenticationMethod clientAuthenticationMethod) {
-        this.clientAuthenticationMethod = clientAuthenticationMethod;
+    public CreateClientCommandBuilder withAuthenticationMethod(AuthenticationMethod authenticationMethod) {
+        this.authenticationMethod = authenticationMethod;
         return this;
     }
 

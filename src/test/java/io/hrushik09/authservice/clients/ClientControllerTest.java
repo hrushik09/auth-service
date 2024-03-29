@@ -43,7 +43,7 @@ public class ClientControllerTest {
                         "pid": "randomPid",
                         "clientId": "randomClientId",
                         "clientSecret": "randomSecret",
-                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                        "authenticationMethod": "CLIENT_SECRET_BASIC",
                         "scopes": [
                         "OPENID"
                         ],
@@ -92,7 +92,7 @@ public class ClientControllerTest {
                                         "pid": "duplicatePid",
                                         "clientId": "randomClientId",
                                         "clientSecret": "randomSecret",
-                                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                                        "authenticationMethod": "CLIENT_SECRET_BASIC",
                                         "scopes": [
                                         "OPENID"
                                         ],
@@ -122,7 +122,7 @@ public class ClientControllerTest {
                                         "pid": "randomPid",
                                         "clientId": "duplicateClientId",
                                         "clientSecret": "randomSecret",
-                                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                                        "authenticationMethod": "CLIENT_SECRET_BASIC",
                                         "scopes": [
                                         "OPENID"
                                         ],
@@ -148,12 +148,12 @@ public class ClientControllerTest {
                 CreateClientCommand cmd = aCommand().withPid("rc")
                         .withClientId("client1")
                         .withClientSecret("secret")
-                        .withClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                        .withAuthenticationMethod(AuthenticationMethod.CLIENT_SECRET_BASIC)
                         .withScopes(scopes)
                         .withRedirectUris(redirectUris)
                         .withAuthorizationGrantTypes(authorizationGrantTypes)
                         .build();
-                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", ClientAuthenticationMethod.CLIENT_SECRET_BASIC, scopes, redirectUris, authorizationGrantTypes);
+                CreateClientResponse response = new CreateClientResponse(34, "rc", "client1", AuthenticationMethod.CLIENT_SECRET_BASIC, scopes, redirectUris, authorizationGrantTypes);
                 when(clientService.create(cmd)).thenReturn(response);
 
                 mockMvc.perform(post("/api/clients")
@@ -163,7 +163,7 @@ public class ClientControllerTest {
                                         "pid": "rc",
                                         "clientId": "client1",
                                         "clientSecret": "secret",
-                                        "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                                        "authenticationMethod": "CLIENT_SECRET_BASIC",
                                         "scopes": [
                                         "OPENID",
                                         "api:read",
@@ -183,7 +183,7 @@ public class ClientControllerTest {
                         .andExpect(jsonPath("$.id", notNullValue()))
                         .andExpect(jsonPath("$.pid", equalTo("rc")))
                         .andExpect(jsonPath("$.clientId", equalTo("client1")))
-                        .andExpect(jsonPath("$.clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC")))
+                        .andExpect(jsonPath("$.authenticationMethod", equalTo("CLIENT_SECRET_BASIC")))
                         .andExpect(jsonPath("$.scopes", hasSize(3)))
                         .andExpect(jsonPath("$.scopes", containsInAnyOrder("OPENID", "api:read", "api:create")))
                         .andExpect(jsonPath("$.redirectUris", hasSize(2)))

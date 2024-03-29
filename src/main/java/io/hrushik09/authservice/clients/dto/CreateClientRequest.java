@@ -1,7 +1,7 @@
 package io.hrushik09.authservice.clients.dto;
 
+import io.hrushik09.authservice.clients.AuthenticationMethod;
 import io.hrushik09.authservice.clients.AuthorizationGrantType;
-import io.hrushik09.authservice.clients.ClientAuthenticationMethod;
 import io.hrushik09.authservice.clients.validation.UniqueAuthorizationGrantTypesConstraint;
 import io.hrushik09.authservice.validation.ListContainsGivenStringConstraint;
 import io.hrushik09.authservice.validation.ListContainsUniqueStringsConstraint;
@@ -18,8 +18,8 @@ public record CreateClientRequest(
         String clientId,
         @NotBlank(message = "clientSecret should be non-blank")
         String clientSecret,
-        @NotNull(message = "clientAuthenticationMethod should be non-null")
-        ClientAuthenticationMethod clientAuthenticationMethod,
+        @NotNull(message = "authenticationMethod should be non-null")
+        AuthenticationMethod authenticationMethod,
         @NotNull(message = "scopes should be non-null")
         @Size(min = 1, message = "should contain at least one scope")
         @ListContainsUniqueStringsConstraint(message = "scopes should be unique")

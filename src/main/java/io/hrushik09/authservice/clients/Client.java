@@ -20,7 +20,7 @@ public class Client {
     private String clientSecret;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private ClientAuthenticationMethod clientAuthenticationMethod;
+    private AuthenticationMethod authenticationMethod;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "client_id", nullable = false)
     private List<ClientScope> clientScopes = new ArrayList<>();
@@ -66,12 +66,12 @@ public class Client {
         this.clientSecret = clientSecret;
     }
 
-    public ClientAuthenticationMethod getClientAuthenticationMethod() {
-        return clientAuthenticationMethod;
+    public AuthenticationMethod getAuthenticationMethod() {
+        return authenticationMethod;
     }
 
-    public void setClientAuthenticationMethod(ClientAuthenticationMethod clientAuthenticationMethod) {
-        this.clientAuthenticationMethod = clientAuthenticationMethod;
+    public void setAuthenticationMethod(AuthenticationMethod authenticationMethod) {
+        this.authenticationMethod = authenticationMethod;
     }
 
     public List<ClientScope> getClientScopes() {

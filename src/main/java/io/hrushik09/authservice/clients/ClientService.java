@@ -35,7 +35,7 @@ public class ClientService {
         client.setPid(cmd.pid());
         client.setClientId(cmd.clientId());
         client.setClientSecret(passwordEncoder.encode(cmd.clientSecret()));
-        client.setClientAuthenticationMethod(cmd.clientAuthenticationMethod());
+        client.setAuthenticationMethod(cmd.authenticationMethod());
         List<ClientScope> clientScopes = cmd.scopes().stream()
                 .map(ClientScope::new)
                 .toList();

@@ -34,7 +34,7 @@ public class ClientEndToEndTest {
                             "pid": "rc",
                             "clientId": "client",
                             "clientSecret": "secret",
-                            "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",
+                            "authenticationMethod": "CLIENT_SECRET_BASIC",
                             "scopes": [
                             "OPENID",
                             "api:read",
@@ -61,7 +61,7 @@ public class ClientEndToEndTest {
                     .body("scopes", containsInAnyOrder("OPENID", "api:read", "api:create"))
                     .body("redirectUris", hasSize(2))
                     .body("redirectUris", containsInAnyOrder("http://localhost:8080/authorized", "http://localhost:8080/api/authorized"))
-                    .body("clientAuthenticationMethod", equalTo("CLIENT_SECRET_BASIC"))
+                    .body("authenticationMethod", equalTo("CLIENT_SECRET_BASIC"))
                     .body("authorizationGrantTypes", hasSize(2))
                     .body("authorizationGrantTypes", containsInAnyOrder("AUTHORIZATION_CODE", "REFRESH_TOKEN"));
         }

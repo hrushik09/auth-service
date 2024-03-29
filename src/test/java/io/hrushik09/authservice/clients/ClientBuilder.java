@@ -9,7 +9,7 @@ public class ClientBuilder {
     private String pid = "somePid";
     private String clientId = "someClientId";
     private String clientSecret = "someSecret";
-    private ClientAuthenticationMethod clientAuthenticationMethod = ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
+    private AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
     private List<ClientScopeBuilder> clientScopeBuilderList = new ArrayList<>();
     private List<ClientRedirectUriBuilder> clientRedirectUriBuilderList = new ArrayList<>();
     private String authorizationGrantType = "someAuthorizationGrantType";
@@ -24,7 +24,7 @@ public class ClientBuilder {
         this.pid = copy.pid;
         this.clientId = copy.clientId;
         this.clientSecret = copy.clientSecret;
-        this.clientAuthenticationMethod = copy.clientAuthenticationMethod;
+        this.authenticationMethod = copy.authenticationMethod;
         this.clientScopeBuilderList = copy.clientScopeBuilderList;
         this.clientRedirectUriBuilderList = copy.clientRedirectUriBuilderList;
         this.authorizationGrantType = copy.authorizationGrantType;
@@ -46,7 +46,7 @@ public class ClientBuilder {
         client.setPid(pid);
         client.setClientId(clientId);
         client.setClientSecret(clientSecret);
-        client.setClientAuthenticationMethod(clientAuthenticationMethod);
+        client.setAuthenticationMethod(authenticationMethod);
         List<ClientScope> clientScopes = clientScopeBuilderList.stream()
                 .map(ClientScopeBuilder::build)
                 .toList();
@@ -81,8 +81,8 @@ public class ClientBuilder {
         return this;
     }
 
-    public ClientBuilder withClientAuthenticationMethod(ClientAuthenticationMethod clientAuthenticationMethod) {
-        this.clientAuthenticationMethod = clientAuthenticationMethod;
+    public ClientBuilder withAuthenticationMethod(AuthenticationMethod authenticationMethod) {
+        this.authenticationMethod = authenticationMethod;
         return this;
     }
 

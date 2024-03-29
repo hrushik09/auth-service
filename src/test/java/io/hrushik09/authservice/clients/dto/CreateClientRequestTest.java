@@ -55,10 +55,10 @@ public class CreateClientRequestTest {
     }
 
     @Test
-    void clientAuthenticationMethodShouldBeNonNull() {
-        CreateClientRequest request = aRequest().withClientAuthenticationMethod(null).build();
+    void authenticationMethodShouldBeNonNull() {
+        CreateClientRequest request = aRequest().withAuthenticationMethod(null).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "clientAuthenticationMethod should be non-null");
+        hasOneViolationWithMessage(violations, "authenticationMethod should be non-null");
     }
 
     @Test
