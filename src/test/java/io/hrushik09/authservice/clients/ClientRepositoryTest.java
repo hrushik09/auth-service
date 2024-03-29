@@ -25,7 +25,7 @@ class ClientRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        Optional<Client> optionalClient = clientRepository.findByPid(client1.getPid());
+        Optional<Client> optionalClient = clientRepository.existsByPid(client1.getPid());
 
         assertThat(optionalClient).isPresent();
         Client fetched = optionalClient.get();
@@ -39,7 +39,7 @@ class ClientRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        Optional<Client> optionalClient = clientRepository.findByClientId(client1.getClientId());
+        Optional<Client> optionalClient = clientRepository.existsByClientId(client1.getClientId());
 
         assertThat(optionalClient).isPresent();
         Client fetched = optionalClient.get();

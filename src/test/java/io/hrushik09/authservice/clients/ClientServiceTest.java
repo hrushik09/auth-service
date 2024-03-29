@@ -45,7 +45,7 @@ class ClientServiceTest {
         @Test
         void shouldThrowWhenPidAlreadyExists() {
             String duplicatePid = "duplicatePid";
-            when(clientRepository.findByPid(duplicatePid))
+            when(clientRepository.existsByPid(duplicatePid))
                     .thenReturn(Optional.of(aClient().withPid(duplicatePid).build()));
 
             CreateClientCommand cmd = aCommand().withPid(duplicatePid).build();
@@ -57,7 +57,7 @@ class ClientServiceTest {
         @Test
         void shouldThrowWhenClientIdAlreadyExists() {
             String duplicateClientId = "duplicateClientId";
-            when(clientRepository.findByClientId(duplicateClientId))
+            when(clientRepository.existsByClientId(duplicateClientId))
                     .thenReturn(Optional.of(aClient().withClientId(duplicateClientId).build()));
 
             CreateClientCommand cmd = aCommand().withClientId(duplicateClientId).build();

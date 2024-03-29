@@ -23,11 +23,11 @@ public class ClientService {
 
     @Transactional
     public CreateClientResponse create(CreateClientCommand cmd) {
-        clientRepository.findByPid(cmd.pid())
+        clientRepository.existsByPid(cmd.pid())
                 .ifPresent(client -> {
                     throw new PidAlreadyExistsException(cmd.pid());
                 });
-        clientRepository.findByClientId(cmd.clientId())
+        clientRepository.existsByClientId(cmd.clientId())
                 .ifPresent(client -> {
                     throw new ClientIdAlreadyExistsException(cmd.clientId());
                 });

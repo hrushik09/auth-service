@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
     @Query("SELECT c FROM Client c WHERE c.pid = :pid")
-    Optional<Client> findByPid(String pid);
+    Optional<Client> existsByPid(String pid);
 
     @Query("SELECT c FROM Client c WHERE c.clientId = :clientId")
-    Optional<Client> findByClientId(String clientId);
+    Optional<Client> existsByClientId(String clientId);
 }
