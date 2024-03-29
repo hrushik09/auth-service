@@ -27,7 +27,8 @@ public class Client {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "client_id", nullable = false)
     private List<ClientRedirectUri> clientRedirectUris;
-    @Column(nullable = false)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "client_id", nullable = false)
     private List<ClientAuthorizationGrantType> clientAuthorizationGrantTypes;
     @Column(nullable = false, insertable = false, updatable = false)
     private Instant createdAt;
