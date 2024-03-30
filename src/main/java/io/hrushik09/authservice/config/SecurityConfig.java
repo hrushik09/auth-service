@@ -89,26 +89,6 @@ public class SecurityConfig {
         };
     }
 
-//    @Bean
-//    RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder) {
-//        RegisteredClient registeredClient = RegisteredClient.withId("rc")
-//                .clientId("client")
-//                .clientSecret(passwordEncoder.encode("secret"))
-//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-//                .scope(OidcScopes.OPENID)
-//                .redirectUri("http://localhost:8080/authorized")
-//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-//                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-//                .tokenSettings(TokenSettings.builder()
-//                        .authorizationCodeTimeToLive(Duration.ofMinutes(10))
-//                        .accessTokenTimeToLive(Duration.ofMinutes(10))
-//                        .accessTokenFormat(OAuth2TokenFormat.SELF_CONTAINED)
-//                        .refreshTokenTimeToLive(Duration.ofMinutes(120))
-//                        .build())
-//                .build();
-//        return new InMemoryRegisteredClientRepository(registeredClient);
-//    }
-
     @Bean
     JWKSource<SecurityContext> jwkSource() throws NoSuchAlgorithmException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
