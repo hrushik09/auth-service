@@ -48,21 +48,25 @@ public class SecurityClientService implements RegisteredClientRepository {
     }
 
     private static RegisteredClient from(Client client) {
-        RegisteredClient.Builder builder = RegisteredClient.withId(client.getPid())
+        return RegisteredClient.withId(client.getPid())
                 .clientId(client.getClientId())
                 .clientSecret(client.getClientSecret())
-                .clientAuthenticationMethod(new ClientAuthenticationMethod(client.getAuthenticationMethod().name()));
-        client.getClientScopes().forEach(clientScope -> builder.scope(clientScope.getValue()));
-        client.getClientRedirectUris().forEach(clientRedirectUri -> builder.redirectUri(clientRedirectUri.getValue()));
-        client.getClientAuthorizationGrantTypes()
-                .forEach(clientAuthorizationGrantType -> builder.authorizationGrantType(
-                        new org.springframework.security.oauth2.core.AuthorizationGrantType(clientAuthorizationGrantType.getValue().name())));
-        builder.tokenSettings(TokenSettings.builder()
-                .authorizationCodeTimeToLive(Duration.ofMinutes(30))
-                .accessTokenTimeToLive(Duration.ofMinutes(30))
-                .refreshTokenTimeToLive(Duration.ofMinutes(300))
-                .build());
-        return builder.build();
+                .clientAuthenticationMethod(new ClientAuthenticationMethod(client.getAuthenticationMethod().name()))
+                .scopes(scopes ->
+                        client.getClientScopes().forEach(scope ->
+                                scopes.add(scope.getValue())))
+                .redirectUris(redirectUris ->
+                        client.getClientRedirectUris().forEach(redirectUri ->
+                                redirectUris.add(redirectUri.getValue())))
+                .authorizationGrantTypes(grantTypes ->
+                        client.getClientAuthorizationGrantTypes().forEach(grantType ->
+                                grantTypes.add(new org.springframework.security.oauth2.core.AuthorizationGrantType(grantType.getValue().name()))))
+                .tokenSettings(TokenSettings.builder()
+                        .authorizationCodeTimeToLive(Duration.ofMinutes(30))
+                        .accessTokenTimeToLive(Duration.ofMinutes(30))
+                        .refreshTokenTimeToLive(Duration.ofMinutes(300))
+                        .build())
+                .build();
     }
 
     @Override
@@ -78,11 +82,13 @@ public class SecurityClientService implements RegisteredClientRepository {
 
     @Override
     public RegisteredClient findById(String id) {
-        return from(clientService.findByPid(id));
+        Client client = clientService.findByPid(id);
+        return from(client);
     }
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
-        return from(clientService.findByClientId(clientId));
+        Client client = clientService.findByClientId(clientId);
+        return from(client);
     }
 }
