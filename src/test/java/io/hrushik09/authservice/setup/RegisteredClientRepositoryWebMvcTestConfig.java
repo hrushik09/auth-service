@@ -1,7 +1,7 @@
 package io.hrushik09.authservice.setup;
 
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 
 import java.time.Duration;
 
-@Configuration
+@TestConfiguration
 public class RegisteredClientRepositoryWebMvcTestConfig {
     @Bean
     RegisteredClientRepository registeredClientRepository() {
