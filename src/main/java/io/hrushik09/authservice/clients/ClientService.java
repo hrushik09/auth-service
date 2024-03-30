@@ -2,6 +2,7 @@ package io.hrushik09.authservice.clients;
 
 import io.hrushik09.authservice.clients.dto.CreateClientCommand;
 import io.hrushik09.authservice.clients.dto.CreateClientResponse;
+import io.hrushik09.authservice.clients.exceptions.ClientDoesNotExist;
 import io.hrushik09.authservice.clients.exceptions.ClientIdAlreadyExistsException;
 import io.hrushik09.authservice.clients.exceptions.PidAlreadyExistsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,14 +24,12 @@ public class ClientService {
 
     @Transactional
     public CreateClientResponse create(CreateClientCommand cmd) {
-        clientRepository.findByPid(cmd.pid())
-                .ifPresent(client -> {
-                    throw new PidAlreadyExistsException(cmd.pid());
-                });
-        clientRepository.findByClientId(cmd.clientId())
-                .ifPresent(client -> {
-                    throw new ClientIdAlreadyExistsException(cmd.clientId());
-                });
+        if (clientRepository.existsByPid(cmd.pid())) {
+            throw new PidAlreadyExistsException(cmd.pid());
+        }
+        if (clientRepository.existsByClientId(cmd.clientId())) {
+            throw new ClientIdAlreadyExistsException(cmd.clientId());
+        }
         Client client = new Client();
         client.setPid(cmd.pid());
         client.setClientId(cmd.clientId());
@@ -50,5 +49,15 @@ public class ClientService {
         client.setClientAuthorizationGrantTypes(clientAuthorizationGrantTypes);
         Client saved = clientRepository.save(client);
         return CreateClientResponse.from(saved);
+    }
+
+    public Client findByPid(String pid) {
+        return clientRepository.findByPid(pid)
+                .orElseThrow(() -> new ClientDoesNotExist("Client with pid " + pid + " does not exist"));
+    }
+
+    public Client findByClientId(String clientId) {
+        return clientRepository.findByClientId(clientId)
+                .orElseThrow(() -> new ClientDoesNotExist("Client with clientId " + clientId + " does not exist"));
     }
 }

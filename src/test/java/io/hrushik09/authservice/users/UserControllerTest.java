@@ -3,6 +3,7 @@ package io.hrushik09.authservice.users;
 import io.hrushik09.authservice.authorities.exceptions.AuthorityDoesNotExist;
 import io.hrushik09.authservice.config.SecurityConfig;
 import io.hrushik09.authservice.setup.AccessControlEvaluatorTestConfig;
+import io.hrushik09.authservice.setup.RegisteredClientRepositoryWebMvcTestConfig;
 import io.hrushik09.authservice.users.dto.CreateUserCommand;
 import io.hrushik09.authservice.users.dto.CreateUserResponse;
 import io.hrushik09.authservice.users.dto.UserAuthorityDTO;
@@ -27,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-@Import({SecurityConfig.class, AccessControlEvaluatorTestConfig.class})
+@Import({SecurityConfig.class, AccessControlEvaluatorTestConfig.class, RegisteredClientRepositoryWebMvcTestConfig.class})
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
