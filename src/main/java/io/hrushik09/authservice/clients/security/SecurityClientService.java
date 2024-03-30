@@ -1,9 +1,6 @@
 package io.hrushik09.authservice.clients.security;
 
-import io.hrushik09.authservice.clients.AuthenticationMethod;
-import io.hrushik09.authservice.clients.AuthorizationGrantType;
-import io.hrushik09.authservice.clients.Client;
-import io.hrushik09.authservice.clients.ClientService;
+import io.hrushik09.authservice.clients.*;
 import io.hrushik09.authservice.clients.dto.CreateClientCommand;
 import io.hrushik09.authservice.clients.exceptions.ClientConversionException;
 import org.slf4j.Logger;
@@ -51,7 +48,7 @@ public class SecurityClientService implements RegisteredClientRepository {
         return RegisteredClient.withId(client.getPid())
                 .clientId(client.getClientId())
                 .clientSecret(client.getClientSecret())
-                .clientAuthenticationMethod(new ClientAuthenticationMethod(client.getAuthenticationMethod().name()))
+                .clientAuthenticationMethod(getClientAuthenticationMethod(client))
                 .scopes(scopes ->
                         client.getClientScopes().forEach(scope ->
                                 scopes.add(scope.getValue())))
@@ -60,13 +57,31 @@ public class SecurityClientService implements RegisteredClientRepository {
                                 redirectUris.add(redirectUri.getValue())))
                 .authorizationGrantTypes(grantTypes ->
                         client.getClientAuthorizationGrantTypes().forEach(grantType ->
-                                grantTypes.add(new org.springframework.security.oauth2.core.AuthorizationGrantType(grantType.getValue().name()))))
+                                grantTypes.add(getAuthorizationGrantType(grantType))))
                 .tokenSettings(TokenSettings.builder()
                         .authorizationCodeTimeToLive(Duration.ofMinutes(30))
                         .accessTokenTimeToLive(Duration.ofMinutes(30))
                         .refreshTokenTimeToLive(Duration.ofMinutes(300))
                         .build())
                 .build();
+    }
+
+    private static ClientAuthenticationMethod getClientAuthenticationMethod(Client client) {
+        if (client.getAuthenticationMethod().equals(AuthenticationMethod.CLIENT_SECRET_BASIC)) {
+            return ClientAuthenticationMethod.CLIENT_SECRET_BASIC;
+        } else {
+            return new ClientAuthenticationMethod(client.getAuthenticationMethod().name());
+        }
+    }
+
+    private static org.springframework.security.oauth2.core.AuthorizationGrantType getAuthorizationGrantType(ClientAuthorizationGrantType grantType) {
+        if (grantType.getValue().equals(AuthorizationGrantType.AUTHORIZATION_CODE)) {
+            return org.springframework.security.oauth2.core.AuthorizationGrantType.AUTHORIZATION_CODE;
+        } else if (grantType.getValue().equals(AuthorizationGrantType.REFRESH_TOKEN)) {
+            return org.springframework.security.oauth2.core.AuthorizationGrantType.REFRESH_TOKEN;
+        } else {
+            return new org.springframework.security.oauth2.core.AuthorizationGrantType(grantType.getValue().name());
+        }
     }
 
     @Override

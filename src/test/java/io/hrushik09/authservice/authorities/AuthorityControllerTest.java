@@ -7,6 +7,7 @@ import io.hrushik09.authservice.authorities.exceptions.AuthorityAlreadyExists;
 import io.hrushik09.authservice.authorities.exceptions.AuthorityDoesNotExist;
 import io.hrushik09.authservice.config.SecurityConfig;
 import io.hrushik09.authservice.setup.AccessControlEvaluatorTestConfig;
+import io.hrushik09.authservice.setup.RegisteredClientRepositoryWebMvcTestConfig;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AuthorityController.class)
-@Import({SecurityConfig.class, AccessControlEvaluatorTestConfig.class})
+@Import({SecurityConfig.class, AccessControlEvaluatorTestConfig.class, RegisteredClientRepositoryWebMvcTestConfig.class})
 public class AuthorityControllerTest {
     @Autowired
     private MockMvc mockMvc;
