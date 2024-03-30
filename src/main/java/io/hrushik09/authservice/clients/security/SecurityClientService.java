@@ -51,7 +51,7 @@ public class SecurityClientService implements RegisteredClientRepository {
                 .clientAuthenticationMethod(getClientAuthenticationMethod(client))
                 .scopes(scopes ->
                         client.getClientScopes().forEach(scope ->
-                                scopes.add(scope.getValue())))
+                                scopes.add(getScope(scope))))
                 .redirectUris(redirectUris ->
                         client.getClientRedirectUris().forEach(redirectUri ->
                                 redirectUris.add(redirectUri.getValue())))
@@ -64,6 +64,14 @@ public class SecurityClientService implements RegisteredClientRepository {
                         .refreshTokenTimeToLive(Duration.ofMinutes(300))
                         .build())
                 .build();
+    }
+
+    private static String getScope(ClientScope scope) {
+        if ("OPENID".equals(scope.getValue())) {
+            return "openid";
+        } else {
+            return scope.getValue();
+        }
     }
 
     private static ClientAuthenticationMethod getClientAuthenticationMethod(Client client) {
