@@ -8,10 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UniqueAuthorizationGrantTypesConstraintValidator.class)
-public @interface UniqueAuthorizationGrantTypesConstraint {
+@Constraint(validatedBy = ValueOfEnumConstraintValidator.class)
+public @interface ValueOfEnumConstraint {
+    Class<? extends Enum<?>> enumClass();
+
     String message() default "";
 
     Class<?>[] groups() default {};

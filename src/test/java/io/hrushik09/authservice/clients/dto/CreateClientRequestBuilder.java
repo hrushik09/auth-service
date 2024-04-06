@@ -1,18 +1,15 @@
 package io.hrushik09.authservice.clients.dto;
 
-import io.hrushik09.authservice.clients.AuthenticationMethod;
-import io.hrushik09.authservice.clients.AuthorizationGrantType;
-
 import java.util.List;
 
 public class CreateClientRequestBuilder {
     private String pid = "somePid";
     private String clientId = "someClientId";
     private String clientSecret = "someClientSecret";
-    private AuthenticationMethod authenticationMethod = AuthenticationMethod.CLIENT_SECRET_BASIC;
+    private String authenticationMethod = "CLIENT_SECRET_BASIC";
     private List<String> scopes = List.of("OPENID");
     private List<String> redirectUris = List.of("someRedirectUri");
-    private List<AuthorizationGrantType> authorizationGrantTypes = List.of(AuthorizationGrantType.AUTHORIZATION_CODE);
+    private List<String> authorizationGrantTypes = List.of("AUTHORIZATION_CODE");
 
     private CreateClientRequestBuilder() {
     }
@@ -54,7 +51,7 @@ public class CreateClientRequestBuilder {
         return this;
     }
 
-    public CreateClientRequestBuilder withAuthenticationMethod(AuthenticationMethod authenticationMethod) {
+    public CreateClientRequestBuilder withAuthenticationMethod(String authenticationMethod) {
         this.authenticationMethod = authenticationMethod;
         return this;
     }
@@ -69,7 +66,7 @@ public class CreateClientRequestBuilder {
         return this;
     }
 
-    public CreateClientRequestBuilder withAuthorizationGrantTypes(List<AuthorizationGrantType> authorizationGrantTypes) {
+    public CreateClientRequestBuilder withAuthorizationGrantTypes(List<String> authorizationGrantTypes) {
         this.authorizationGrantTypes = authorizationGrantTypes;
         return this;
     }
