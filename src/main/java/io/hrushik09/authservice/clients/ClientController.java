@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/clients")
 public class ClientController {
@@ -21,7 +23,11 @@ public class ClientController {
     @PreAuthorize("hasAuthority('clients:create')")
     @ResponseStatus(HttpStatus.CREATED)
     CreateClientResponse create(@RequestBody @Valid CreateClientRequest request) {
-        CreateClientCommand cmd = new CreateClientCommand(request.pid(), request.clientId(), request.clientSecret(), request.authenticationMethod(), request.scopes(), request.redirectUris(), request.authorizationGrantTypes());
+        AuthenticationMethod authenticationMethod = AuthenticationMethod.valueOf(request.authenticationMethod());
+        List<AuthorizationGrantType> authorizationGrantTypes = request.authorizationGrantTypes().stream()
+                .map(AuthorizationGrantType::valueOf)
+                .toList();
+        CreateClientCommand cmd = new CreateClientCommand(request.pid(), request.clientId(), request.clientSecret(), authenticationMethod, request.scopes(), request.redirectUris(), authorizationGrantTypes);
         return clientService.create(cmd);
     }
 }

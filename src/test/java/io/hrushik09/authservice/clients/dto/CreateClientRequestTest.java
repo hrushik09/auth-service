@@ -1,6 +1,5 @@
 package io.hrushik09.authservice.clients.dto;
 
-import io.hrushik09.authservice.clients.AuthorizationGrantType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -58,7 +57,14 @@ public class CreateClientRequestTest {
     void authenticationMethodShouldBeNonNull() {
         CreateClientRequest request = aRequest().withAuthenticationMethod(null).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "authenticationMethod should be non-null");
+        hasCountViolationsWithOneOfThemAs(violations, 2, "authenticationMethod should be non-null");
+    }
+
+    @Test
+    void authenticationMethodShouldBeValid() {
+        CreateClientRequest request = aRequest().withAuthenticationMethod("RANDOM").build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasOneViolationWithMessage(violations, "authenticationMethod should be valid");
     }
 
     @Test
@@ -147,12 +153,20 @@ public class CreateClientRequestTest {
     void eachAuthorizationGrantTypeShouldBeNonNull() {
         CreateClientRequest request = aRequest().withAuthorizationGrantTypes(Collections.singletonList(null)).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
-        hasOneViolationWithMessage(violations, "authorizationGrantType should be non-null");
+        hasCountViolationsWithOneOfThemAs(violations, 2, "authorizationGrantType should be non-null");
+    }
+
+    @Test
+    void eachAuthorizationGrantTypeShouldBeValid() {
+        List<String> authorizationGrantTypes = List.of("RANDOM");
+        CreateClientRequest request = aRequest().withAuthorizationGrantTypes(authorizationGrantTypes).build();
+        Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
+        hasOneViolationWithMessage(violations, "authorizationGrantType should be valid");
     }
 
     @Test
     void authorizationGrantTypesShouldContainUniqueEntries() {
-        List<AuthorizationGrantType> authorizationGrantTypes = List.of(AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.AUTHORIZATION_CODE);
+        List<String> authorizationGrantTypes = List.of("AUTHORIZATION_CODE", "AUTHORIZATION_CODE");
         CreateClientRequest request = aRequest().withAuthorizationGrantTypes(authorizationGrantTypes).build();
         Set<ConstraintViolation<CreateClientRequest>> violations = validator.validate(request);
         hasOneViolationWithMessage(violations, "authorizationGrantTypes should be unique");
