@@ -1,4 +1,4 @@
-package io.hrushik09.authservice.config;
+package io.hrushik09.authservice.config.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

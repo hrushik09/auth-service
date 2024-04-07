@@ -1,4 +1,4 @@
-package io.hrushik09.authservice.config;
+package io.hrushik09.authservice.config.security;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

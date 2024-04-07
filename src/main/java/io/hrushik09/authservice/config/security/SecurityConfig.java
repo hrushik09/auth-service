@@ -1,4 +1,4 @@
-package io.hrushik09.authservice.config;
+package io.hrushik09.authservice.config.security;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;

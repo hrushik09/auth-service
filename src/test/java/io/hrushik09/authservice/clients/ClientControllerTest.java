@@ -4,7 +4,8 @@ import io.hrushik09.authservice.clients.dto.CreateClientCommand;
 import io.hrushik09.authservice.clients.dto.CreateClientResponse;
 import io.hrushik09.authservice.clients.exceptions.ClientIdAlreadyExistsException;
 import io.hrushik09.authservice.clients.exceptions.PidAlreadyExistsException;
-import io.hrushik09.authservice.config.SecurityConfig;
+import io.hrushik09.authservice.config.security.SecurityConfig;
+import io.hrushik09.authservice.setup.LoggingServiceTestConfig;
 import io.hrushik09.authservice.setup.RegisteredClientRepositoryWebMvcTestConfig;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ClientController.class)
-@Import({SecurityConfig.class, RegisteredClientRepositoryWebMvcTestConfig.class})
+@Import({SecurityConfig.class, RegisteredClientRepositoryWebMvcTestConfig.class, LoggingServiceTestConfig.class})
 public class ClientControllerTest {
     @Autowired
     private MockMvc mockMvc;
