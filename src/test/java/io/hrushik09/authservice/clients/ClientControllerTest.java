@@ -4,7 +4,7 @@ import io.hrushik09.authservice.clients.dto.CreateClientCommand;
 import io.hrushik09.authservice.clients.dto.CreateClientResponse;
 import io.hrushik09.authservice.clients.exceptions.ClientIdAlreadyExistsException;
 import io.hrushik09.authservice.clients.exceptions.PidAlreadyExistsException;
-import io.hrushik09.authservice.config.SecurityConfig;
+import io.hrushik09.authservice.config.security.SecurityConfig;
 import io.hrushik09.authservice.setup.RegisteredClientRepositoryWebMvcTestConfig;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

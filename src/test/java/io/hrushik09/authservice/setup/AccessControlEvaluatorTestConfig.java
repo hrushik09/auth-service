@@ -1,6 +1,6 @@
 package io.hrushik09.authservice.setup;
 
-import io.hrushik09.authservice.config.AccessControlEvaluator;
+import io.hrushik09.authservice.config.security.AccessControlEvaluator;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
